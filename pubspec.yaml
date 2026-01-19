@@ -34,6 +34,9 @@ dependencies:
   get: ^4.6.6
   http: ^1.2.2
   shared_preferences: ^2.2.3
+  google_fonts:
+  loading_animation_widget:
+  flutter_svg:
 
 dev_dependencies:
   flutter_test:
