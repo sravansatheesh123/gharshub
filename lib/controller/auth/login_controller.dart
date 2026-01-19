@@ -3,6 +3,10 @@ import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../core/storage_keys.dart';
+<<<<<<< HEAD
+=======
+import '../../screen/dashboard/dashboard_page.dart';
+>>>>>>> 4bc64c5 (updated)
 import '../../services/auth/auth_service.dart';
 
 
@@ -54,7 +58,13 @@ class LoginController extends GetxController {
         password: passwordController.text.trim(),
       );
 
+<<<<<<< HEAD
       // Save token + user data
+=======
+      print("TOKEN => ${res.token}");
+      print("USER => ${res.user.username} | ROLE => ${res.user.role}");
+
+>>>>>>> 4bc64c5 (updated)
       final prefs = await SharedPreferences.getInstance();
       await prefs.setString(StorageKeys.token, res.token);
       await prefs.setString(StorageKeys.userId, res.user.id);
@@ -64,8 +74,13 @@ class LoginController extends GetxController {
 
       Get.snackbar("Success", "Login successful");
 
+<<<<<<< HEAD
       // TODO: Navigate to dashboard/home page
       // Get.offAll(() => HomePage());
+=======
+
+      Get.offAll(() => const DashboardPage());
+>>>>>>> 4bc64c5 (updated)
 
     } catch (e) {
       Get.snackbar("Login Failed", e.toString().replaceAll("Exception:", ""));
