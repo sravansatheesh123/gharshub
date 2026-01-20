@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gharshub/core/app_colors.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 // ignore: must_be_immutable
@@ -36,9 +37,9 @@ class AppText extends StatelessWidget {
       overflow: maxLines != null ? TextOverflow.ellipsis : null,
       style: GoogleFonts.poppins(
         height: fontheight ?? 1,
-        fontWeight: fontWeight ?? FontWeight.w500,
+        fontWeight: fontWeight ?? FontWeight.w600,
         fontSize: fontSize ?? 13,
-        color: color ?? const Color(0xff010101),
+        color: color ?? AppColors.blackColor,
         decoration: underline! ? TextDecoration.underline : TextDecoration.none,
       ),
     );
