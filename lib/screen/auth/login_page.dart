@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:gharshub/core/app_colors.dart';
+import 'package:gharshub/screen/auth/widget/forgot_password_dialog.dart';
 import '../../controller/auth/login_controller.dart';
 
 class LoginPage extends StatelessWidget {
@@ -189,16 +190,14 @@ class LoginPage extends StatelessWidget {
                         ),
                         const Spacer(),
                         InkWell(
-                          onTap: controller.onForgotPassword,
-                          child: const Text(
-                            "Forgot password?",
-                            style: TextStyle(
-                              fontSize: 13,
-                              color: Color(0xFF0A3D91),
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ),
+                          onTap: () {
+                            Get.dialog(
+                              ForgotPasswordDialog(),
+                              barrierDismissible: false,
+                            );
+                          },
+                          child: const Text("Forgot password?"),
+                        )
                       ],
                     ),
 

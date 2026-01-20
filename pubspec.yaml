@@ -37,6 +37,7 @@ dependencies:
   google_fonts:
   loading_animation_widget:
   flutter_svg:
+  app_links: ^6.3.2
 
 dev_dependencies:
   flutter_test:
