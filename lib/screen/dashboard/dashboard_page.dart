@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:gharshub/core/app_colors.dart';
 import 'package:gharshub/custom_widgets/app_button.dart';
 import 'package:gharshub/custom_widgets/app_text.dart';
+import 'package:gharshub/screen/dashboard/widget/attendance_widget.dart';
 import 'package:gharshub/screen/dashboard/widget/dashborad_widget.dart';
 import 'package:gharshub/screen/salary_details/salary_details_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -178,6 +179,9 @@ class DashboardPage extends StatelessWidget {
                       ],
                     ),
                   ),
+
+                  const SizedBox(height: 16),
+                  AttendanceWidget(),
                 ],
               ),
             ),
