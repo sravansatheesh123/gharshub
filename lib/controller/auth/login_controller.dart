@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../../core/storage_keys.dart';
 import '../../screen/dashboard/dashboard_page.dart';
 import '../../services/auth/auth_service.dart';
+import '../dashboard/dashboard_controller.dart';
 
 class LoginController extends GetxController {
   final emailController = TextEditingController();
@@ -53,22 +53,27 @@ class LoginController extends GetxController {
         password: passwordController.text.trim(),
       );
 
-      // ✅ Print in console
-      print("TOKEN => ${res.token}");
-      print("USER => ${res.user.username} | ROLE => ${res.user.role}");
-
-      // ✅ Save token + user data
       final prefs = await SharedPreferences.getInstance();
+
       await prefs.setString(StorageKeys.token, res.token);
       await prefs.setString(StorageKeys.userId, res.user.id);
       await prefs.setString(StorageKeys.username, res.user.username);
       await prefs.setString(StorageKeys.role, res.user.role);
       await prefs.setString(StorageKeys.name, res.user.name);
 
+
+      await prefs.setInt(
+        StorageKeys.loginTime,
+        DateTime.now().millisecondsSinceEpoch,
+      );
+
+      if (Get.isRegistered<DashboardController>()) {
+        Get.delete<DashboardController>(force: true);
+      }
+
       Get.snackbar("Success", "Login successful");
 
-      // ✅ Navigate to Dashboard
-      Get.offAll(() => const DashboardPage());
+      Get.offAll(() => DashboardPage());
     } catch (e) {
       Get.snackbar("Login Failed", e.toString().replaceAll("Exception:", ""));
     } finally {
@@ -76,13 +81,12 @@ class LoginController extends GetxController {
     }
   }
 
-  void onForgotPassword() {
-    Get.snackbar("Forgot Password", "Forgot password clicked");
-  }
+
 
   void signInAsSupervisor() {
     Get.snackbar("Role", "Sign in as Site Supervisor clicked");
   }
+
 
   void signInAsTechnician() {
     Get.snackbar("Role", "Sign in as Technician clicked");

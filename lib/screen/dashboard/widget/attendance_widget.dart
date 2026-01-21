@@ -7,17 +7,16 @@ import '../../../core/app_colors.dart';
 class AttendanceWidget extends StatelessWidget {
   AttendanceWidget({super.key});
 
-  final controller = Get.put(DashboardController());
-
+  final DashboardController controller = Get.find<DashboardController>();
   @override
   Widget build(BuildContext context) {
     return Obx(
-      () => Container(
+          () => Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
           color: AppColors.whiteColor,
           borderRadius: BorderRadius.circular(16),
-          boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 6)],
+          boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 6)],
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -25,8 +24,12 @@ class AttendanceWidget extends StatelessWidget {
             AppText("Attendance", fontSize: 16, fontWeight: FontWeight.bold),
             const SizedBox(height: 12),
 
-            AppText("Punch In : ${controller.punchInFormatted}"),
-            const SizedBox(height: 8),
+            AppText("Punch In  : ${controller.punchInFormatted}"),
+            const SizedBox(height: 6),
+
+            // ✅ Add Punch Out Time here
+            AppText("Punch Out : ${controller.punchOutFormatted}"),
+            const SizedBox(height: 10),
 
             Row(
               children: [
@@ -42,28 +45,27 @@ class AttendanceWidget extends StatelessWidget {
 
             const SizedBox(height: 16),
 
-            Row(
-              children: [
-                Expanded(
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: controller.isPunchedIn.value
-                          ? AppColors.redColor
-                          : Colors.green,
-                      padding: const EdgeInsets.symmetric(vertical: 14),
-                    ),
-                    onPressed: () {
-                      controller.isPunchedIn.value
-                          ? controller.punchOut()
-                          : controller.punchIn();
-                    },
-                    child: AppText(
-                      controller.isPunchedIn.value ? "PUNCH OUT" : "PUNCH IN",
-                      color: AppColors.whiteColor,
-                    ),
-                  ),
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: controller.isPunchedIn.value
+                      ? AppColors.redColor
+                      : Colors.green,
+                  padding: const EdgeInsets.symmetric(vertical: 14),
                 ),
-              ],
+                onPressed: controller.isLoading.value
+                    ? null
+                    : () {
+                  controller.isPunchedIn.value
+                      ? controller.punchOut()
+                      : controller.punchIn();
+                },
+                child: AppText(
+                  controller.isPunchedIn.value ? "PUNCH OUT" : "PUNCH IN",
+                  color: AppColors.whiteColor,
+                ),
+              ),
             ),
           ],
         ),

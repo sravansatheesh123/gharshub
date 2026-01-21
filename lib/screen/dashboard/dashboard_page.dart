@@ -5,15 +5,18 @@ import 'package:gharshub/custom_widgets/app_button.dart';
 import 'package:gharshub/custom_widgets/app_text.dart';
 import 'package:gharshub/screen/dashboard/widget/apply_leave_widget.dart';
 import 'package:gharshub/screen/dashboard/widget/attendance_widget.dart';
+import 'package:gharshub/screen/dashboard/widget/dashboard_appbar.dart';
 import 'package:gharshub/screen/dashboard/widget/dashborad_widget.dart';
 import 'package:gharshub/screen/salary_details/salary_details_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../controller/dashboard/dashboard_controller.dart';
 import '../../core/storage_keys.dart';
 import '../auth/login_page.dart';
 
 class DashboardPage extends StatelessWidget {
-  const DashboardPage({super.key});
+   DashboardPage({super.key});
+  final DashboardController dashboardController = Get.put(DashboardController());
 
   Future<Map<String, String>> getUserData() async {
     final prefs = await SharedPreferences.getInstance();
@@ -30,27 +33,28 @@ class DashboardPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.whiteColor,
-      appBar: AppBar(
-        backgroundColor: AppColors.whiteColor,
-        leading: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: CircleAvatar(
-            radius: 20,
-            backgroundColor: AppColors.buttonColor,
-          ),
-        ),
-        title: AppText("Dashboard", fontWeight: FontWeight.bold, fontSize: 16),
-        actions: [
-          IconButton(
-            onPressed: () async {
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(85),
+        child: Obx(
+              () => DashboardAppBar(
+            notificationCount: dashboardController.notificationCount.value,
+            onTapNotification: () {
+              dashboardController.openNotificationPopup();
+            },
+            onTapLogout: () async {
               final prefs = await SharedPreferences.getInstance();
               await prefs.clear();
+
+              if (Get.isRegistered<DashboardController>()) {
+                Get.delete<DashboardController>(force: true);
+              }
+
               Get.offAll(() => LoginPage());
             },
-            icon: const Icon(Icons.logout),
           ),
-        ],
+        ),
       ),
+
       body: FutureBuilder(
         future: getUserData(),
         builder: (context, snapshot) {

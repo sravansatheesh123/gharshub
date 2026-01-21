@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-
 import '../../core/api_constants.dart';
 import '../../models/leave/latest_leave_model.dart';
 
@@ -24,7 +23,6 @@ class LeaveService {
       return LatestLeaveResponseModel.fromJson(data);
     }
 
-    final message = data["message"] ?? "Failed to fetch notification";
-    throw Exception(message);
+    throw Exception(data["message"] ?? "Failed to fetch leave");
   }
 }
