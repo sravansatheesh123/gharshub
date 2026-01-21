@@ -5,16 +5,18 @@ class DashboardAppBar extends StatelessWidget implements PreferredSizeWidget {
   final int notificationCount;
   final VoidCallback onTapNotification;
   final VoidCallback onTapLogout;
+  final VoidCallback onTapProfile;
 
   const DashboardAppBar({
     super.key,
     required this.notificationCount,
     required this.onTapNotification,
     required this.onTapLogout,
+    required this.onTapProfile,
   });
 
   @override
-  Size get preferredSize => const Size.fromHeight(85); // increased height
+  Size get preferredSize => const Size.fromHeight(85);
 
   @override
   Widget build(BuildContext context) {
@@ -61,6 +63,10 @@ class DashboardAppBar extends StatelessWidget implements PreferredSizeWidget {
         ],
       ),
       actions: [
+        IconButton(
+          onPressed: onTapProfile,
+          icon: const Icon(Icons.person_outline),
+        ),
         _notificationIcon(
           count: notificationCount,
           onTap: onTapNotification,

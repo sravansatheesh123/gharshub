@@ -35,11 +35,12 @@ class AttendanceWidget extends StatelessWidget {
               children: [
                 const Icon(Icons.timer),
                 const SizedBox(width: 6),
-                AppText(
-                  controller.liveTime,
+                Obx(() => AppText(
+                  controller.currentTime.value,
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
-                ),
+                )),
+
               ],
             ),
 

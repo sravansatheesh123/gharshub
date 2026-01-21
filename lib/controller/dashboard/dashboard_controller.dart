@@ -14,6 +14,8 @@ class DashboardController extends GetxController {
   final PunchService _punchService = PunchService();
   final LeaveService _leaveService = LeaveService();
 
+  RxString currentTime = "--:--:--".obs;
+  Timer? _clockTimer;
 
   RxBool isPunchedIn = false.obs;
   Rx<DateTime?> punchInTime = Rx<DateTime?>(null);
@@ -42,6 +44,13 @@ class DashboardController extends GetxController {
     return today.year == out.year &&
         today.month == out.month &&
         today.day == out.day;
+  }
+  void _startCurrentClock() {
+    _clockTimer?.cancel();
+
+    _clockTimer = Timer.periodic(const Duration(seconds: 1), (_) {
+      currentTime.value = DateFormat("HH:mm:ss").format(DateTime.now());
+    });
   }
 
   Future<void> fetchTodayPunch() async {
@@ -314,11 +323,13 @@ class DashboardController extends GetxController {
     super.onInit();
     fetchTodayPunch();
     fetchLatestLeaveNotification();
+    _startCurrentClock();
   }
 
   @override
   void onClose() {
     _timer?.cancel();
+    _clockTimer?.cancel();
     super.onClose();
   }
 }

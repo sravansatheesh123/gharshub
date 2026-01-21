@@ -13,6 +13,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../controller/dashboard/dashboard_controller.dart';
 import '../../core/storage_keys.dart';
 import '../auth/login_page.dart';
+import '../profile/profile_page.dart';
 
 class DashboardPage extends StatelessWidget {
    DashboardPage({super.key});
@@ -51,6 +52,9 @@ class DashboardPage extends StatelessWidget {
 
               Get.offAll(() => LoginPage());
             },
+                onTapProfile: () {
+                  Get.to(() => const ProfilePage());
+                },
           ),
         ),
       ),
