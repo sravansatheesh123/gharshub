@@ -10,47 +10,43 @@ class DashboardController extends GetxController {
   Rx<Duration> workedDuration = Duration.zero.obs;
   Rx<Duration> totalWorkedDuration = Duration.zero.obs;
 
-  Timer? _timer;
+  // current running clock
+  Rx<DateTime> currentTime = DateTime.now().obs;
 
-  bool get isTodayAlreadyCompleted {
-    if (punchOutDate.value == null) return false;
+  Timer? _workTimer;
+  Timer? _clockTimer;
 
-    final today = DateTime.now();
-    final out = punchOutDate.value!;
-
-    return today.year == out.year &&
-        today.month == out.month &&
-        today.day == out.day;
+  @override
+  void onInit() {
+    super.onInit();
+    _clockTimer = Timer.periodic(const Duration(seconds: 1), (_) {
+      currentTime.value = DateTime.now();
+      if (isPunchedIn.value) {
+        punchInTime.refresh();
+      }
+    });
   }
 
   void punchIn() {
-    if (isTodayAlreadyCompleted) {
-      Get.snackbar(
-        "Not Allowed",
-        "You have already completed attendance for today",
-      );
-      return;
-    }
-
     punchInTime.value = DateTime.now();
     isPunchedIn.value = true;
 
-    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+    _workTimer?.cancel();
+    _workTimer = Timer.periodic(const Duration(seconds: 1), (_) {
       workedDuration.value =
           DateTime.now().difference(punchInTime.value!);
     });
   }
 
   void punchOut() {
-    _timer?.cancel();
-
+    _workTimer?.cancel();
     totalWorkedDuration.value = workedDuration.value;
     punchOutDate.value = DateTime.now();
-
     isPunchedIn.value = false;
   }
 
-  String get liveTime {
+  //  WORKED TIME → HH:MM:SS (seconds always running)
+  String get workedTime {
     final d =
         isPunchedIn.value ? workedDuration.value : totalWorkedDuration.value;
 
@@ -59,16 +55,28 @@ class DashboardController extends GetxController {
         "${(d.inSeconds % 60).toString().padLeft(2, '0')}";
   }
 
+  //  CURRENT LIVE CLOCK → HH:MM:SS
+  String get currentClock {
+    final t = currentTime.value;
+    return "${t.hour.toString().padLeft(2, '0')}:"
+        "${t.minute.toString().padLeft(2, '0')}:"
+        "${t.second.toString().padLeft(2, '0')}";
+  }
+
+  //  PUNCH IN TIME → HH:MM:SS AM/PM
   String get punchInFormatted {
-    if (punchInTime.value == null) return "--:--";
+    if (punchInTime.value == null) return "--:--:--";
     final t = punchInTime.value!;
     return "${t.hour.toString().padLeft(2, '0')}:"
-        "${t.minute.toString().padLeft(2, '0')} ${t.hour >= 12 ? "PM" : "AM"}";
+        "${t.minute.toString().padLeft(2, '0')}:"
+        "${t.second.toString().padLeft(2, '0')} "
+        "${t.hour >= 12 ? "PM" : "AM"}";
   }
 
   @override
   void onClose() {
-    _timer?.cancel();
+    _workTimer?.cancel();
+    _clockTimer?.cancel();
     super.onClose();
   }
 }

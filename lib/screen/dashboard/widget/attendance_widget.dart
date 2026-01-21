@@ -7,7 +7,8 @@ import '../../../core/app_colors.dart';
 class AttendanceWidget extends StatelessWidget {
   AttendanceWidget({super.key});
 
-  final controller = Get.put(DashboardController());
+  final DashboardController controller =
+      Get.put(DashboardController());
 
   @override
   Widget build(BuildContext context) {
@@ -17,53 +18,77 @@ class AttendanceWidget extends StatelessWidget {
         decoration: BoxDecoration(
           color: AppColors.whiteColor,
           borderRadius: BorderRadius.circular(16),
-          boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 6)],
+          boxShadow: const [
+            BoxShadow(color: Colors.black12, blurRadius: 6),
+          ],
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            AppText("Attendance", fontSize: 16, fontWeight: FontWeight.bold),
+            AppText(
+              "Attendance",
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+            ),
             const SizedBox(height: 12),
 
+            // punch in time
             AppText("Punch In : ${controller.punchInFormatted}"),
-            const SizedBox(height: 8),
+            const SizedBox(height: 12),
 
+            // current running clock
+            Row(
+              children: [
+                const Icon(Icons.access_time),
+                const SizedBox(width: 6),
+                AppText(
+                  controller.currentClock,
+                  fontSize: 20,
+                  fontWeight: FontWeight.w600,
+                ),
+              ],
+            ),
+
+            const SizedBox(height: 12),
+
+            // worked duration
             Row(
               children: [
                 const Icon(Icons.timer),
                 const SizedBox(width: 6),
                 AppText(
-                  controller.liveTime,
-                  fontSize: 20,
+                  controller.workedTime,
+                  fontSize: 24,
                   fontWeight: FontWeight.bold,
                 ),
               ],
             ),
 
-            const SizedBox(height: 16),
+            const SizedBox(height: 20),
 
-            Row(
-              children: [
-                Expanded(
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: controller.isPunchedIn.value
-                          ? AppColors.redColor
-                          : Colors.green,
-                      padding: const EdgeInsets.symmetric(vertical: 14),
-                    ),
-                    onPressed: () {
-                      controller.isPunchedIn.value
-                          ? controller.punchOut()
-                          : controller.punchIn();
-                    },
-                    child: AppText(
-                      controller.isPunchedIn.value ? "PUNCH OUT" : "PUNCH IN",
-                      color: AppColors.whiteColor,
-                    ),
-                  ),
+            // punch in / out button
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: controller.isPunchedIn.value
+                      ? AppColors.redColor
+                      : Colors.green,
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 14),
                 ),
-              ],
+                onPressed: () {
+                  controller.isPunchedIn.value
+                      ? controller.punchOut()
+                      : controller.punchIn();
+                },
+                child: AppText(
+                  controller.isPunchedIn.value
+                      ? "PUNCH OUT"
+                      : "PUNCH IN",
+                  color: AppColors.whiteColor,
+                ),
+              ),
             ),
           ],
         ),
