@@ -25,10 +25,19 @@ class AttendanceWidget extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            AppText(
-              "Attendance",
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                AppText(
+                  "Attendance",
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+                AppText(
+                  controller.currentClock,
+                  fontWeight: FontWeight.w600,
+                ),
+              ],
             ),
             const SizedBox(height: 12),
 
@@ -36,18 +45,18 @@ class AttendanceWidget extends StatelessWidget {
             AppText("Punch In : ${controller.punchInFormatted}"),
             const SizedBox(height: 12),
 
-            // current running clock
-            Row(
-              children: [
-                const Icon(Icons.access_time),
-                const SizedBox(width: 6),
-                AppText(
-                  controller.currentClock,
-                  fontSize: 20,
-                  fontWeight: FontWeight.w600,
-                ),
-              ],
-            ),
+            // // current running clock
+            // Row(
+            //   children: [
+            //     const Icon(Icons.access_time),
+            //     const SizedBox(width: 6),
+            //     AppText(
+            //       controller.currentClock,
+            //       fontSize: 20,
+            //       fontWeight: FontWeight.w600,
+            //     ),
+            //   ],
+            // ),
 
             const SizedBox(height: 12),
 
