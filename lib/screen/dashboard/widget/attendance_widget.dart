@@ -45,19 +45,6 @@ class AttendanceWidget extends StatelessWidget {
             AppText("Punch In : ${controller.punchInFormatted}"),
             const SizedBox(height: 12),
 
-            // // current running clock
-            // Row(
-            //   children: [
-            //     const Icon(Icons.access_time),
-            //     const SizedBox(width: 6),
-            //     AppText(
-            //       controller.currentClock,
-            //       fontSize: 20,
-            //       fontWeight: FontWeight.w600,
-            //     ),
-            //   ],
-            // ),
-
             const SizedBox(height: 12),
 
             // worked duration
