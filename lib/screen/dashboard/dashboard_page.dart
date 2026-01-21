@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:gharshub/core/app_colors.dart';
 import 'package:gharshub/custom_widgets/app_button.dart';
 import 'package:gharshub/custom_widgets/app_text.dart';
+import 'package:gharshub/screen/dashboard/widget/apply_leave_widget.dart';
 import 'package:gharshub/screen/dashboard/widget/attendance_widget.dart';
 import 'package:gharshub/screen/dashboard/widget/dashborad_widget.dart';
 import 'package:gharshub/screen/salary_details/salary_details_page.dart';
@@ -181,6 +182,34 @@ class DashboardPage extends StatelessWidget {
                   ),
 
                   const SizedBox(height: 16),
+                  DashBoardWidget(
+                    title: "Leave",
+                    widget: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(left: 28.0),
+                          child: Column(
+                            children: [reusableRowTile("Leave Balance ", '6')],
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: CustomButton(
+                            onTap: () {
+                              showDialog(
+                                context: context,
+                                builder: (_) => const ApplyLeaveWidget(),
+                              );
+                            },
+                            text: "Apply Leave",
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  SizedBox(height: 15),
                   AttendanceWidget(),
                 ],
               ),
