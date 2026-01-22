@@ -8,4 +8,6 @@ class ApiConstants {
   static const String punchToday = "$baseUrl/api/punch/today";
   static const String latestLeave = "$baseUrl/api/leaves/latest";
   static const String applyLeave = "$baseUrl/api/leaves/apply";
+  static const String monthlyDaysWorked = "$baseUrl/api/punch/monthly-days-worked";
+  static const String monthlySummary = "$baseUrl/api/punch/monthly-summary";
 }

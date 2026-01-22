@@ -16,6 +16,13 @@ class DashboardController extends GetxController {
 
   RxString currentTime = "--:--:--".obs;
   Timer? _clockTimer;
+  RxInt daysWorked = 0.obs;
+  RxString totalHoursWorkedText = "0".obs;
+
+  RxDouble normalHours = 0.0.obs;
+  RxDouble normalOvertime = 0.0.obs;
+  RxDouble holidayOvertime = 0.0.obs;
+
 
   RxBool isPunchedIn = false.obs;
   Rx<DateTime?> punchInTime = Rx<DateTime?>(null);
@@ -52,6 +59,50 @@ class DashboardController extends GetxController {
       currentTime.value = DateFormat("HH:mm:ss").format(DateTime.now());
     });
   }
+  Future<void> fetchMonthlyDaysWorked() async {
+    try {
+      final token = await _getToken();
+      if (token.isEmpty) return;
+
+      final res = await _punchService.getMonthlyDaysWorked(token: token);
+
+      daysWorked.value = res.data?.daysWorked ?? 0;
+    } catch (e) {
+      daysWorked.value = 0;
+    }
+  }
+
+  Future<void> fetchMonthlySummary() async {
+    try {
+      final token = await _getToken();
+      if (token.isEmpty) return;
+
+      final res = await _punchService.getMonthlySummary(token: token);
+
+      normalHours.value = (res.summary?.totalWorkHours ?? 0.0);
+      normalOvertime.value = (res.summary?.totalNormalOvertime ?? 0.0);
+      holidayOvertime.value = (res.summary?.totalHolidayOvertime ?? 0.0);
+
+
+      final total = (normalHours.value +
+          normalOvertime.value +
+          holidayOvertime.value)
+          .toDouble();
+
+      totalHoursWorkedText.value = total.toStringAsFixed(1);
+
+      print(" CONTROLLER UPDATED totalHoursWorkedText => ${totalHoursWorkedText.value}");
+    } catch (e, s) {
+      print(" fetchMonthlySummary ERROR => $e");
+      print(" STACKTRACE => $s");
+      normalHours.value = 0;
+      normalOvertime.value = 0;
+      holidayOvertime.value = 0;
+      totalHoursWorkedText.value = "0";
+    }
+
+  }
+
 
   Future<void> fetchTodayPunch() async {
     try {
@@ -324,6 +375,8 @@ class DashboardController extends GetxController {
     fetchTodayPunch();
     fetchLatestLeaveNotification();
     _startCurrentClock();
+    fetchMonthlyDaysWorked();
+    fetchMonthlySummary();
   }
 
   @override

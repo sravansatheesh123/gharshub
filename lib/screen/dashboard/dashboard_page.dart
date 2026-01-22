@@ -17,7 +17,7 @@ import '../profile/profile_page.dart';
 
 class DashboardPage extends StatelessWidget {
    DashboardPage({super.key});
-  final DashboardController dashboardController = Get.put(DashboardController());
+   final DashboardController dashboardController = Get.find<DashboardController>();
 
   Future<Map<String, String>> getUserData() async {
     final prefs = await SharedPreferences.getInstance();
@@ -91,25 +91,30 @@ class DashboardPage extends StatelessWidget {
                   //   data["token"] ?? "",
                   //   style: const TextStyle(fontSize: 12),
                   // ),
-                  DashBoardWidget(
-                    title: "Work Summary",
-                    subTitle: "Total Hours Worked  : ",
-                    subTitleValue: "128",
-                    isEnable: true,
-                    widget: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        reusableRowTile("Days Worked : ", "18"),
-                        AppText(
-                          "Auto calculated from timesheet",
-                          fontheight: 2,
-                          color: AppColors.lightgrayColor,
-                          fontSize: 10,
-                        ),
-                      ],
-                    ),
-                  ),
-
+                  Obx(() {
+                    print("🔥 UI showing totalHoursWorkedText => ${dashboardController.totalHoursWorkedText.value}");
+                    return DashBoardWidget(
+                      title: "Work Summary",
+                      subTitle: "Total Hours Worked  : ",
+                      subTitleValue: dashboardController.totalHoursWorkedText.value,
+                      isEnable: true,
+                      widget: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          reusableRowTile(
+                            "Days Worked : ",
+                            dashboardController.daysWorked.value.toString(),
+                          ),
+                          AppText(
+                            "Auto calculated from timesheet",
+                            fontheight: 2,
+                            color: AppColors.lightgrayColor,
+                            fontSize: 10,
+                          ),
+                        ],
+                      ),
+                    );
+                  }),
                   DashBoardWidget(
                     title: "Salary Snapshot",
                     subTitle: "Hourly Rate  : ",

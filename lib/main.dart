@@ -8,6 +8,8 @@ import 'package:gharshub/screen/auth/login_page.dart';
 import 'package:gharshub/screen/auth/reset_password_page.dart';
 import 'package:gharshub/screen/dashboard/dashboard_page.dart';
 
+import 'bindings/dashboard_binding.dart';
+
 void main() {
   runApp(const MyApp());
 }
@@ -45,11 +47,18 @@ class _MyAppState extends State<MyApp> {
         loginTime != 0 &&
         (now - loginTime) <= threeDaysMs) {
 
-      _startPage = DashboardPage();
+      _startPage = Builder(
+        builder: (context) {
+          DashboardBinding().dependencies();
+          return DashboardPage();
+        },
+      );
+
     } else {
       await prefs.clear();
       _startPage = LoginPage();
     }
+
 
     setState(() {
       _checkingSession = false;
@@ -86,6 +95,7 @@ class _MyAppState extends State<MyApp> {
       debugShowCheckedModeBanner: false,
       title: 'Gharshub',
       theme: ThemeData(useMaterial3: true),
+      initialBinding: DashboardBinding(),
       home: _checkingSession ? const _LoadingPage() : _startPage,
     );
   }
