@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:get/state_manager.dart';
+import 'package:gharshub/controller/dashboard/payslip/payslip_controller.dart';
 import 'package:gharshub/core/app_colors.dart';
 import 'package:gharshub/custom_widgets/app_text.dart';
+import 'package:gharshub/screen/salary_details/digital_signature_widget.dart';
+import 'package:signature/signature.dart';
 
 class PayslipWidget extends StatelessWidget {
   const PayslipWidget({super.key});
@@ -122,6 +126,11 @@ class PayslipWidget extends StatelessWidget {
                     _reusableListtile("Total", "500"),
                   ],
                 ),
+              ),
+              SizedBox(height: 10),
+              _reusableContainer(
+                title: "Employee Signature",
+                childWidget: Column(children: [DigitalSignatureWidget()]),
               ),
             ],
           ),
