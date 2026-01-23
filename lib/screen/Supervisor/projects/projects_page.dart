@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:gharshub/core/app_colors.dart';
 import 'package:gharshub/custom_widgets/app_button.dart';
 import 'package:gharshub/custom_widgets/app_text.dart';
+import 'package:gharshub/screen/Supervisor/view_task/view_task_page.dart';
 
 class ProjectsPage extends StatelessWidget {
   const ProjectsPage({super.key});
@@ -152,7 +154,9 @@ class ProjectsPage extends StatelessWidget {
                         children: [
                           CustomButton(
                             width: 100,
-                            onTap: () {},
+                            onTap: () {
+                              Get.to(ViewTaskPage());
+                            },
                             text: "View Task",
                             textSize: 12,
                           ),
