@@ -59,6 +59,12 @@ class DashboardController extends GetxController {
       currentTime.value = DateFormat("HH:mm:ss").format(DateTime.now());
     });
   }
+  Future<String> getUserId() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString(StorageKeys.userId) ?? "";
+  }
+
+
   Future<void> fetchMonthlyDaysWorked() async {
     try {
       final token = await _getToken();

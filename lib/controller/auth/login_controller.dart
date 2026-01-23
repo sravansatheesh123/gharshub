@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../bindings/dashboard_binding.dart';
 import '../../core/storage_keys.dart';
-import '../../screen/dashboard/dashboard_page.dart';
+import '../../screen/Supervisor/supervisordashboard/supervisordashboard.dart';
 import '../../services/auth/auth_service.dart';
-import '../dashboard/dashboard_controller.dart';
+import '../../screen/dashboard/dashboard_page.dart';
 
 class LoginController extends GetxController {
   final emailController = TextEditingController();
@@ -61,19 +63,23 @@ class LoginController extends GetxController {
       await prefs.setString(StorageKeys.role, res.user.role);
       await prefs.setString(StorageKeys.name, res.user.name);
 
-
       await prefs.setInt(
         StorageKeys.loginTime,
         DateTime.now().millisecondsSinceEpoch,
       );
 
-      if (Get.isRegistered<DashboardController>()) {
-        Get.delete<DashboardController>(force: true);
-      }
-
       Get.snackbar("Success", "Login successful");
 
-      Get.offAll(() => DashboardPage());
+      final role = (res.user.role).toLowerCase().trim();
+
+      if (role == "supervisor" || role == "site_supervisor") {
+        Get.offAll(() => const SupervisorDashboard());
+      } else {
+
+        DashboardBinding().dependencies();
+        Get.offAll(() => DashboardPage());
+      }
+
     } catch (e) {
       Get.snackbar("Login Failed", e.toString().replaceAll("Exception:", ""));
     } finally {
@@ -81,15 +87,12 @@ class LoginController extends GetxController {
     }
   }
 
-
-
   void signInAsSupervisor() {
-    Get.snackbar("Role", "Sign in as Site Supervisor clicked");
+    onSignIn();
   }
 
-
   void signInAsTechnician() {
-    Get.snackbar("Role", "Sign in as Technician clicked");
+    onSignIn();
   }
 
   @override

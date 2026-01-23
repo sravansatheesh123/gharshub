@@ -17,7 +17,10 @@ import '../profile/profile_page.dart';
 
 class DashboardPage extends StatelessWidget {
    DashboardPage({super.key});
-   final DashboardController dashboardController = Get.find<DashboardController>();
+   // final DashboardController dashboardController = Get.find<DashboardController>();
+   final DashboardController controller = Get.find<DashboardController>();
+   final DashboardController dashboardController =
+   Get.find<DashboardController>();
 
   Future<Map<String, String>> getUserData() async {
     final prefs = await SharedPreferences.getInstance();

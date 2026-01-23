@@ -7,8 +7,9 @@ import 'package:gharshub/core/storage_keys.dart';
 import 'package:gharshub/screen/auth/login_page.dart';
 import 'package:gharshub/screen/auth/reset_password_page.dart';
 import 'package:gharshub/screen/dashboard/dashboard_page.dart';
+import 'package:gharshub/screen/Supervisor/supervisordashboard/supervisordashboard.dart';
 
-import 'bindings/dashboard_binding.dart';
+import 'controller/dashboard/dashboard_controller.dart';
 
 void main() {
   runApp(const MyApp());
@@ -39,6 +40,7 @@ class _MyAppState extends State<MyApp> {
 
     final token = prefs.getString(StorageKeys.token) ?? "";
     final loginTime = prefs.getInt(StorageKeys.loginTime) ?? 0;
+    final role = (prefs.getString(StorageKeys.role) ?? "").toLowerCase().trim();
 
     final now = DateTime.now().millisecondsSinceEpoch;
     const threeDaysMs = 3 * 24 * 60 * 60 * 1000;
@@ -46,19 +48,19 @@ class _MyAppState extends State<MyApp> {
     if (token.isNotEmpty &&
         loginTime != 0 &&
         (now - loginTime) <= threeDaysMs) {
+      if (role == "supervisor" || role == "site_supervisor") {
+        _startPage = const SupervisorDashboard();
+      } else {
 
-      _startPage = Builder(
-        builder: (context) {
-          DashboardBinding().dependencies();
-          return DashboardPage();
-        },
-      );
-
+        if (!Get.isRegistered<DashboardController>()) {
+          Get.put(DashboardController(), permanent: true);
+        }
+        _startPage = DashboardPage();
+      }
     } else {
       await prefs.clear();
       _startPage = LoginPage();
     }
-
 
     setState(() {
       _checkingSession = false;
@@ -95,7 +97,6 @@ class _MyAppState extends State<MyApp> {
       debugShowCheckedModeBanner: false,
       title: 'Gharshub',
       theme: ThemeData(useMaterial3: true),
-      initialBinding: DashboardBinding(),
       home: _checkingSession ? const _LoadingPage() : _startPage,
     );
   }

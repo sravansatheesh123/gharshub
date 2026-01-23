@@ -10,4 +10,11 @@ class ApiConstants {
   static const String applyLeave = "$baseUrl/api/leaves/apply";
   static const String monthlyDaysWorked = "$baseUrl/api/punch/monthly-days-worked";
   static const String monthlySummary = "$baseUrl/api/punch/monthly-summary";
+  static String salaryDetails(String employeeId, String year) =>
+      "$baseUrl/api/hr/salary-details/$employeeId/$year";
+  static const String monthlyTimesheet = "$baseUrl/api/punch/monthly-timesheet";
+
+  ////supervisor////
+  static const String supervisorDashboardSummary =
+      "$baseUrl/api/site-supervisor/dashboard/summary";
 }
