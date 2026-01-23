@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:gharshub/core/app_colors.dart';
+import 'package:gharshub/custom_widgets/app_bar.dart';
 import 'package:gharshub/custom_widgets/app_button.dart';
 import 'package:gharshub/custom_widgets/app_text.dart';
 import 'package:gharshub/screen/Supervisor/make_attendance/make_attendance_page.dart';
@@ -13,22 +14,14 @@ class SupervisorDashboard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final SupervisorDashboardController controller =
-    Get.put(SupervisorDashboardController());
+    final SupervisorDashboardController controller = Get.put(
+      SupervisorDashboardController(),
+    );
     return Scaffold(
       backgroundColor: AppColors.skyColor,
-      appBar: AppBar(
-        centerTitle: true,
-        leading: const Padding(
-          padding: EdgeInsets.all(8.0),
-          child: CircleAvatar(radius: 40),
-        ),
-        title: AppText("Gharshub", fontSize: 18),
-        actions: [
-          IconButton(onPressed: () {}, icon: const Icon(Icons.notifications)),
-        ],
-        backgroundColor: AppColors.whiteColor,
-        elevation: 3,
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(40),
+        child: SuperVisorAppBar(),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -55,8 +48,10 @@ class SupervisorDashboard extends StatelessWidget {
               ),
               Container(
                 width: double.infinity,
-                padding:
-                const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 20,
+                ),
                 decoration: BoxDecoration(
                   color: AppColors.whiteColor,
                   borderRadius: BorderRadius.circular(12),
@@ -73,15 +68,19 @@ class SupervisorDashboard extends StatelessWidget {
                   children: [
                     Row(
                       children: [
-                        Obx(() => _reusableExpanedWidget(
-                          "Total Assigned",
-                          controller.totalAssigned.value.toString(),
-                        )),
+                        Obx(
+                          () => _reusableExpanedWidget(
+                            "Total Assigned",
+                            controller.totalAssigned.value.toString(),
+                          ),
+                        ),
                         const SizedBox(width: 5),
-                        Obx(() => _reusableExpanedWidget(
-                          "Present",
-                          controller.present.value.toString(),
-                        )),
+                        Obx(
+                          () => _reusableExpanedWidget(
+                            "Present",
+                            controller.present.value.toString(),
+                          ),
+                        ),
                       ],
                     ),
 
@@ -89,15 +88,19 @@ class SupervisorDashboard extends StatelessWidget {
 
                     Row(
                       children: [
-                        Obx(() => _reusableExpanedWidget(
-                          "Absent",
-                          controller.absent.value.toString(),
-                        )),
+                        Obx(
+                          () => _reusableExpanedWidget(
+                            "Absent",
+                            controller.absent.value.toString(),
+                          ),
+                        ),
                         const SizedBox(width: 5),
-                        Obx(() => _reusableExpanedWidget(
-                          "StandBy",
-                          controller.standby.value.toString(),
-                        )),
+                        Obx(
+                          () => _reusableExpanedWidget(
+                            "StandBy",
+                            controller.standby.value.toString(),
+                          ),
+                        ),
                       ],
                     ),
 
@@ -115,8 +118,10 @@ class SupervisorDashboard extends StatelessWidget {
               // Assigned Projects
               Container(
                 width: double.infinity,
-                padding:
-                const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 20,
+                ),
                 decoration: BoxDecoration(
                   color: AppColors.whiteColor,
                   borderRadius: BorderRadius.circular(12),
@@ -138,10 +143,12 @@ class SupervisorDashboard extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                       fontheight: 1,
                     ),
-                    Obx(() => AppText(
-                      "Total Project : ${controller.totalProjects.value}",
-                      fontheight: 2,
-                    )),
+                    Obx(
+                      () => AppText(
+                        "Total Project : ${controller.totalProjects.value}",
+                        fontheight: 2,
+                      ),
+                    ),
 
                     const SizedBox(height: 7),
                     _reusableListtile("Project Alpha", "On Track", 80),
@@ -166,8 +173,10 @@ class SupervisorDashboard extends StatelessWidget {
               // Alerts
               Container(
                 width: double.infinity,
-                padding:
-                const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 20,
+                ),
                 decoration: BoxDecoration(
                   color: AppColors.whiteColor,
                   borderRadius: BorderRadius.circular(12),
@@ -248,7 +257,12 @@ class SupervisorDashboard extends StatelessWidget {
     );
   }
 
-  Widget _reusableListtile(String title, String status, int value, {Color? color}) {
+  Widget _reusableListtile(
+    String title,
+    String status,
+    int value, {
+    Color? color,
+  }) {
     return ListTile(
       contentPadding: const EdgeInsets.only(left: 0),
       leading: Column(
@@ -277,3 +291,4 @@ class SupervisorDashboard extends StatelessWidget {
     );
   }
 }
+
