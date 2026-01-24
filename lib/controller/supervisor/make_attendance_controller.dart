@@ -37,9 +37,6 @@ class MakeAttendanceController extends GetxController {
   int get selectedCount => selectedUserIds.length;
   bool get hasSelection => selectedUserIds.isNotEmpty;
 
-  // =========================================================
-  // PRINT JSON (Formatted)
-  // =========================================================
   void _printJson(String title, dynamic data) {
     try {
       const encoder = JsonEncoder.withIndent("  ");
@@ -50,9 +47,6 @@ class MakeAttendanceController extends GetxController {
     }
   }
 
-  // =========================================================
-  // FETCH ALL (TECH + LOGS)
-  // =========================================================
   Future<void> fetchAll({required String date}) async {
     try {
       isLoading.value = true;
@@ -117,9 +111,6 @@ class MakeAttendanceController extends GetxController {
     }
   }
 
-  // =========================================================
-  // GET LOG BY USER
-  // =========================================================
   AttendanceLogModel? getLogForUser(String userId) {
     try {
       return logs.firstWhere((e) => e.user.id == userId);
@@ -128,9 +119,6 @@ class MakeAttendanceController extends GetxController {
     }
   }
 
-  // =========================================================
-  // SELECTION
-  // =========================================================
   void toggleSelection(String userId, bool isSelected) {
     if (isSelected) {
       selectedUserIds.add(userId);
@@ -159,9 +147,6 @@ class MakeAttendanceController extends GetxController {
     print("🟩 DESELECT ALL");
   }
 
-  // =========================================================
-  // DATE PICKER
-  // =========================================================
   Future<void> pickDate(BuildContext context) async {
     final now = DateTime.now();
 
@@ -189,9 +174,6 @@ class MakeAttendanceController extends GetxController {
     await fetchAll(date: selectedDate.value);
   }
 
-  // =========================================================
-  // TIME
-  // =========================================================
   String _nowTimeHHMM() {
     final now = DateTime.now();
     final hh = now.hour.toString().padLeft(2, '0');
@@ -199,9 +181,6 @@ class MakeAttendanceController extends GetxController {
     return "$hh:$mm";
   }
 
-  // =========================================================
-  // VALIDATION HELPERS
-  // =========================================================
   bool _hasPunchIn(String userId) {
     final log = getLogForUser(userId);
     final inTime = log?.inTime;
@@ -225,6 +204,9 @@ class MakeAttendanceController extends GetxController {
   void _printSelectionStatus(List<String> ids) {
     final list = ids.map((id) {
       final tech = technicians.firstWhereOrNull((t) => t.id == id);
+      print(
+          "👤 EDIT REQUEST USER => $id | TECH FOUND => ${tech != null} | NAME => ${tech?.name}");
+
       final log = getLogForUser(id);
 
       return {
@@ -241,10 +223,6 @@ class MakeAttendanceController extends GetxController {
 
     _printJson("🟩 SELECTED EMPLOYEE STATUS", list);
   }
-
-  // =========================================================
-  // PUNCH IN POPUP
-  // =========================================================
   Future<void> showPunchInPopup(BuildContext context) async {
     String selectedTime = _nowTimeHHMM();
 
@@ -336,7 +314,8 @@ class MakeAttendanceController extends GetxController {
                     children: [
                       const Text(
                         "Time",
-                        style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
+                        style: TextStyle(
+                            fontSize: 12, fontWeight: FontWeight.w600),
                       ),
                       InkWell(
                         onTap: () {
@@ -373,7 +352,8 @@ class MakeAttendanceController extends GetxController {
                     },
                     child: Container(
                       width: double.infinity,
-                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 12, vertical: 12),
                       decoration: BoxDecoration(
                         border: Border.all(color: Colors.black12),
                         borderRadius: BorderRadius.circular(6),
@@ -394,7 +374,8 @@ class MakeAttendanceController extends GetxController {
                   children: [
                     TextButton(
                       onPressed: () => Get.back(),
-                      child: const Text("Cancel", style: TextStyle(color: Colors.black)),
+                      child: const Text("Cancel",
+                          style: TextStyle(color: Colors.black)),
                     ),
                     const SizedBox(width: 10),
                     ElevatedButton(
@@ -440,7 +421,8 @@ class MakeAttendanceController extends GetxController {
                           );
 
                           Get.back();
-                          Get.snackbar("Success", res["message"] ?? "Punch In completed");
+                          Get.snackbar("Success",
+                              res["message"] ?? "Punch In completed");
 
                           await fetchAll(date: selectedDate.value);
                         } catch (e) {
@@ -459,9 +441,6 @@ class MakeAttendanceController extends GetxController {
     );
   }
 
-  // =========================================================
-  // EDIT PUNCH IN POPUP
-  // =========================================================
   Future<void> showEditPunchInPopup(BuildContext context) async {
     String selectedTime = _nowTimeHHMM();
     final TextEditingController reasonController = TextEditingController(
@@ -518,7 +497,10 @@ class MakeAttendanceController extends GetxController {
                       setState(() {});
                     },
                     child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 12,
+                      ),
                       decoration: BoxDecoration(
                         border: Border.all(color: Colors.black12),
                         borderRadius: BorderRadius.circular(6),
@@ -538,7 +520,8 @@ class MakeAttendanceController extends GetxController {
                     children: [
                       const Text(
                         "Time",
-                        style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
+                        style: TextStyle(
+                            fontSize: 12, fontWeight: FontWeight.w600),
                       ),
                       InkWell(
                         onTap: () {
@@ -575,7 +558,10 @@ class MakeAttendanceController extends GetxController {
                     },
                     child: Container(
                       width: double.infinity,
-                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 12,
+                      ),
                       decoration: BoxDecoration(
                         border: Border.all(color: Colors.black12),
                         borderRadius: BorderRadius.circular(6),
@@ -596,7 +582,10 @@ class MakeAttendanceController extends GetxController {
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(6),
                       ),
-                      contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 10,
+                      ),
                     ),
                   ),
                 ],
@@ -607,7 +596,8 @@ class MakeAttendanceController extends GetxController {
                   children: [
                     TextButton(
                       onPressed: () => Get.back(),
-                      child: const Text("Cancel", style: TextStyle(color: Colors.black)),
+                      child: const Text("Cancel",
+                          style: TextStyle(color: Colors.black)),
                     ),
                     const SizedBox(width: 10),
                     ElevatedButton(
@@ -632,21 +622,29 @@ class MakeAttendanceController extends GetxController {
                         _printSelectionStatus(ids);
 
                         try {
-                          for (final id in ids) {
-                            print("🟩 SENDING EDIT FOR USER => $id");
+                          Map<String, dynamic>? lastResponse;
 
-                            await AttendanceService.editPunch(
-                              userId: id,
+                          for (final userId in ids) {
+                            print("🟩 SENDING EDIT FOR USER => $userId");
+
+                            lastResponse = await AttendanceService.editPunch(
+                              employeeId: userId,
                               date: selectedDate.value,
-                              editedInTime: selectedTime,
+                              inTime: selectedTime,
                               reason: reasonController.text.trim().isEmpty
-                                  ? "Supervisor edited punch in time"
+                                  ? "Employee forgot to punch in/out"
                                   : reasonController.text.trim(),
                             );
                           }
 
                           Get.back();
-                          Get.snackbar("Success", "Edit request submitted");
+
+                          Get.snackbar(
+                            "Success",
+                            lastResponse?["message"] ??
+                                "Punch edit request submitted for HR approval",
+                          );
+
                           await fetchAll(date: selectedDate.value);
                         } catch (e) {
                           Get.snackbar("Failed", e.toString());
@@ -664,9 +662,6 @@ class MakeAttendanceController extends GetxController {
     );
   }
 
-  // =========================================================
-  // PUNCH OUT POPUP
-  // =========================================================
   Future<void> showPunchOutPopup(BuildContext context) async {
     String selectedTime = _nowTimeHHMM();
 
@@ -720,7 +715,8 @@ class MakeAttendanceController extends GetxController {
                       setState(() {});
                     },
                     child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 12, vertical: 12),
                       decoration: BoxDecoration(
                         border: Border.all(color: Colors.black12),
                         borderRadius: BorderRadius.circular(6),
@@ -740,7 +736,8 @@ class MakeAttendanceController extends GetxController {
                     children: [
                       const Text(
                         "Time",
-                        style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
+                        style: TextStyle(
+                            fontSize: 12, fontWeight: FontWeight.w600),
                       ),
                       InkWell(
                         onTap: () {
@@ -777,7 +774,8 @@ class MakeAttendanceController extends GetxController {
                     },
                     child: Container(
                       width: double.infinity,
-                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 12, vertical: 12),
                       decoration: BoxDecoration(
                         border: Border.all(color: Colors.black12),
                         borderRadius: BorderRadius.circular(6),
@@ -793,7 +791,8 @@ class MakeAttendanceController extends GetxController {
                   children: [
                     TextButton(
                       onPressed: () => Get.back(),
-                      child: const Text("Cancel", style: TextStyle(color: Colors.black)),
+                      child: const Text("Cancel",
+                          style: TextStyle(color: Colors.black)),
                     ),
                     const SizedBox(width: 10),
                     ElevatedButton(
@@ -817,7 +816,6 @@ class MakeAttendanceController extends GetxController {
 
                         _printSelectionStatus(ids);
 
-                        // validation 1: punch in must exist
                         final noIn = ids.where((id) => !_hasPunchIn(id)).toList();
                         if (noIn.isNotEmpty) {
                           Get.snackbar(
@@ -827,7 +825,6 @@ class MakeAttendanceController extends GetxController {
                           return;
                         }
 
-                        // validation 2: punch out should not exist already
                         final alreadyOut = _alreadyPunchedOutIds(ids);
                         if (alreadyOut.isNotEmpty) {
                           Get.snackbar(
@@ -846,7 +843,8 @@ class MakeAttendanceController extends GetxController {
                           );
 
                           Get.back();
-                          Get.snackbar("Success", res["message"] ?? "Punch Out completed");
+                          Get.snackbar("Success",
+                              res["message"] ?? "Punch Out completed");
 
                           await fetchAll(date: selectedDate.value);
                         } catch (e) {

@@ -9,6 +9,8 @@ class AttendanceLogModel {
   final String? displayInTime;
   final String? displayOutTime;
 
+  final PendingEdit? pendingEdit;
+
   AttendanceLogModel({
     required this.id,
     required this.date,
@@ -18,6 +20,7 @@ class AttendanceLogModel {
     this.status,
     this.displayInTime,
     this.displayOutTime,
+    this.pendingEdit,
   });
 
   factory AttendanceLogModel.fromJson(Map<String, dynamic> json) {
@@ -30,6 +33,29 @@ class AttendanceLogModel {
       status: json["status"],
       displayInTime: json["displayInTime"],
       displayOutTime: json["displayOutTime"],
+      pendingEdit: json["pendingEdit"] != null
+          ? PendingEdit.fromJson(json["pendingEdit"])
+          : null,
+    );
+  }
+}
+
+class PendingEdit {
+  final String? editedInTime;
+  final String? editedOutTime;
+  final String? reason;
+
+  PendingEdit({
+    this.editedInTime,
+    this.editedOutTime,
+    this.reason,
+  });
+
+  factory PendingEdit.fromJson(Map<String, dynamic> json) {
+    return PendingEdit(
+      editedInTime: json["editedInTime"],
+      editedOutTime: json["editedOutTime"],
+      reason: json["reason"],
     );
   }
 }

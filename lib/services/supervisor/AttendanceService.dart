@@ -172,20 +172,29 @@ class AttendanceService {
 
   /// ✅ EDIT PUNCH (Punch edit request)
   static Future<Map<String, dynamic>> editPunch({
-    required String userId,
+    required String employeeId,
     required String date,
-    required String editedInTime,
+    String? inTime,
+    String? outTime,
     required String reason,
   }) async {
     final token = await _getToken();
     final url = Uri.parse(ApiConstants.editPunch);
 
     final body = {
-      "userId": userId,
+      "employeeId": employeeId,
       "date": date,
-      "editedInTime": editedInTime,
       "reason": reason,
     };
+
+    // ✅ backend requires at least one time
+    if (inTime != null && inTime.trim().isNotEmpty) {
+      body["inTime"] = inTime;
+    }
+
+    if (outTime != null && outTime.trim().isNotEmpty) {
+      body["outTime"] = outTime;
+    }
 
     print("📌 EDIT PUNCH URL => $url");
     _printJson("📌 EDIT PUNCH BODY", body);
@@ -217,4 +226,5 @@ class AttendanceService {
 
     throw Exception(response.body);
   }
+
 }
