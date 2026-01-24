@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../bindings/dashboard_binding.dart';
 import '../../core/storage_keys.dart';
-import '../../screen/Supervisor/supervisordashboard/supervisordashboard.dart';
 import '../../services/auth/auth_service.dart';
 import '../../screen/dashboard/dashboard_page.dart';
+import '../../screen/Supervisor/supervisordashboard/supervisordashboard.dart';
+import '../dashboard/dashboard_controller.dart';
+import '../supervisor/supervisor_dashboard_controller.dart';
 
 class LoginController extends GetxController {
   final emailController = TextEditingController();
@@ -62,26 +63,38 @@ class LoginController extends GetxController {
       await prefs.setString(StorageKeys.username, res.user.username);
       await prefs.setString(StorageKeys.role, res.user.role);
       await prefs.setString(StorageKeys.name, res.user.name);
-
       await prefs.setInt(
         StorageKeys.loginTime,
         DateTime.now().millisecondsSinceEpoch,
       );
 
+      // ✅ TOKEN PRINT (for testing)
+      print("✅ LOGIN TOKEN => ${res.token}");
+      print("📌 SAVED TOKEN IN PREF => ${prefs.getString(StorageKeys.token)}");
+      print("✅ USER ROLE => ${res.user.role}");
+      print("✅ USERNAME => ${res.user.username}");
+
       Get.snackbar("Success", "Login successful");
 
-      final role = (res.user.role).toLowerCase().trim();
+      final role = res.user.role.toLowerCase().trim();
 
+      // ✅ Navigate based on role
       if (role == "supervisor" || role == "site_supervisor") {
+        if (!Get.isRegistered<SupervisorDashboardController>()) {
+          Get.put(SupervisorDashboardController(), permanent: true);
+        }
         Get.offAll(() => const SupervisorDashboard());
       } else {
-
-        DashboardBinding().dependencies();
+        if (!Get.isRegistered<DashboardController>()) {
+          Get.put(DashboardController(), permanent: true);
+        }
         Get.offAll(() => DashboardPage());
       }
-
     } catch (e) {
-      Get.snackbar("Login Failed", e.toString().replaceAll("Exception:", ""));
+      Get.snackbar(
+        "Login Failed",
+        e.toString().replaceAll("Exception:", "").trim(),
+      );
     } finally {
       isLoading.value = false;
     }

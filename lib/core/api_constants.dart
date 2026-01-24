@@ -15,6 +15,9 @@ class ApiConstants {
   static const String monthlyTimesheet = "$baseUrl/api/punch/monthly-timesheet";
 
   ////supervisor////
-  static const String supervisorDashboardSummary =
-      "$baseUrl/api/site-supervisor/dashboard/summary";
+  static const String supervisorDashboardSummary = "$baseUrl/api/site-supervisor/dashboard/summary";
+  static String supervisorAttendanceLogs(String date) => "$baseUrl/api/site-supervisor/attendance/attendance-logs?date=$date";
+  static const String supervisorAttendanceTechnicians = "$baseUrl/api/site-supervisor/attendance/technicians";
+  static const String bulkManualPunch = "$baseUrl/api/punch/hr/bulk-manual-punch";
+  static const String editPunch = "$baseUrl/api/site-supervisor/attendance/edit-punch";
 }
