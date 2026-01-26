@@ -12,6 +12,7 @@ class CustomTextField extends StatelessWidget {
   IconData? icon;
   Widget? suffixIcon, prefixIcon;
   bool? obscureText = false;
+  bool? isEnable = false;
   int? maxLines;
   CustomTextField({
     required this.textEditingController,
@@ -24,6 +25,7 @@ class CustomTextField extends StatelessWidget {
     this.title,
     this.prefixIcon,
     this.maxLines,
+    this.isEnable,
     super.key,
   });
 
@@ -32,12 +34,14 @@ class CustomTextField extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          children: [
-            AppText(title, fontSize: 14, color: AppColors.lightgrayColor),
-            Text("  *", style: TextStyle(color: AppColors.redColor)),
-          ],
-        ),
+        isEnable == false
+            ? Row(
+                children: [
+                  AppText(title, fontSize: 14, color: AppColors.lightgrayColor),
+                  Text("  *", style: TextStyle(color: AppColors.redColor)),
+                ],
+              )
+            : Container(),
         const SizedBox(height: 10),
         TextFormField(
           obscureText: obscureText == true ? true : false,
