@@ -158,6 +158,9 @@ class DashboardController extends GetxController {
     }
   }
 
+ 
+ 
+ 
   Future<void> punchIn() async {
     if (isTodayAlreadyCompleted) {
       Get.snackbar(

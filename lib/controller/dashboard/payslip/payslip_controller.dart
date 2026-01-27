@@ -1,9 +1,10 @@
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:signature/signature.dart';
-
+import 'dart:convert';
 import '../../../core/storage_keys.dart';
 import '../../../models/payslip/payslip.dart';
 import '../../../services/payslip/payslip_service.dart';
@@ -111,7 +112,7 @@ class PayslipController extends GetxController {
       // ✅ Proper 403 message
       if (msg.contains("403") || msg.toLowerCase().contains("not authorized")) {
         errorMessage.value =
-        "You are not authorized to view this payslip.\nOnly HR/Admin can access.";
+            "You are not authorized to view this payslip.\nOnly HR/Admin can access.";
       } else {
         errorMessage.value = msg.replaceAll("Exception:", "").trim();
       }
@@ -127,9 +128,24 @@ class PayslipController extends GetxController {
   }
 
   Future<void> saveSignature() async {
+    print("🖊️ saveSignature() called");
+
     if (signatureController.isNotEmpty) {
       final image = await signatureController.toPngBytes();
+      final imageBytes = await signatureController.toPngBytes();
+
+      // ✅ file name
+      final String fileName = "signature.png";
+
       signatureImage.value = image;
+
+      final String signatureType = "upload";
+      final String base64Data = base64Encode(imageBytes!);
+      final String fileData = "data:image/png;base64,$base64Data";
+      print(fileData);
+      post_signature_to_backend(fileData);
+    } else {
+      print("⚠️ Signature controller is empty");
     }
   }
 
@@ -137,5 +153,47 @@ class PayslipController extends GetxController {
   void onClose() {
     signatureController.dispose();
     super.onClose();
+  }
+
+  post_signature_to_backend(
+    // String employeeId,
+    // String month,
+    // String year,
+    String fileData, // data:image/png;base64,...
+  ) async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString(StorageKeys.token) ?? "";
+    final url = Uri.parse(
+      'https://api.gharshub.com/api/salary-receipts/signature/6977434079760c6e6b90eadc/0/2027',
+      // 'https://api.gharshub.com/api/salary-receipts/signature/$employeeId/$month/$year',
+    );
+
+    print("📌 uploadSignature called");
+    print("📌 URL => $url");
+
+    final headers = {
+      'Authorization': 'Bearer $token',
+      'Content-Type': 'application/json',
+    };
+
+    final body = jsonEncode({
+      "signatureType": "upload",
+      "fileName": "signature.png",
+      "fileData": fileData,
+    });
+
+    print("📤 Request Body Keys => signatureType, fileName, fileData");
+    print("📦 fileData length => ${fileData.length}");
+
+    final response = await http.post(url, headers: headers, body: body);
+
+    print("📥 Status Code => ${response.statusCode}");
+    print("📥 Response Body => ${response.body}");
+    final decoded = jsonDecode(response.body);
+    Get.snackbar('Signature Alert','${decoded['message']}');
+
+    if (response.statusCode != 200) {
+      throw Exception("Signature upload failed");
+    }
   }
 }
