@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:gharshub/core/api_constants.dart';
-import 'package:gharshub/models/recent_receipt.dart';
+import 'package:gharshub/models/my_recent_receipt.dart';
 import 'package:http/http.dart' as http;
 
 class RecentReceiptService {

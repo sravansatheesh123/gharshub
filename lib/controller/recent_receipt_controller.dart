@@ -1,24 +1,45 @@
+import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:get/state_manager.dart';
 import 'package:gharshub/core/storage_keys.dart';
-import 'package:gharshub/models/recent_receipt.dart';
+import 'package:gharshub/models/my_recent_receipt.dart';
 import 'package:gharshub/services/recent_receipt_service.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'package:month_picker_dialog/month_picker_dialog.dart';
 
 class RecentReceiptController extends GetxController {
   RecentReceiptModel? receiptModel;
+  bool isLoading = false;
+  TextEditingController reasonReceiptCtlr = TextEditingController();
+  setLoader(status) {
+    isLoading = status;
+    update();
+  }
+
+  bool isEnableRequest = false;
+  setReceiptRequest(status) {
+    isEnableRequest = status;
+    update();
+  }
+
   Future<String> _getToken() async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getString(StorageKeys.token) ?? "";
   }
 
   Future<void> getRecentReceipt() async {
+    setLoader(true);
     try {
       final token = await _getToken();
       final res = await RecentReceiptService().getrecentReceipt(token: token);
       receiptModel = res;
+      setLoader(false);
       print(res);
     } catch (e) {
+      setLoader(false);
       Get.snackbar(
         "Punch Status",
         e.toString().replaceAll("Exception:", "").trim(),
@@ -31,4 +52,22 @@ class RecentReceiptController extends GetxController {
     getRecentReceipt();
     super.onInit();
   }
+
+String? selectedMonth;
+int selectedYear = DateTime.now().year;
+
+final List<String> months = [
+  'January',
+  'February',
+  'March',
+  'April',
+  'May',
+  'June',
+  'July',
+  'August',
+  'September',
+  'October',
+  'November',
+  'December',
+];
 }

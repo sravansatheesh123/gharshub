@@ -51,18 +51,20 @@ class RecentReceipts {
     int? year;
     String? monthName;
     Summary? summary;
+    SalaryDetails? salaryDetails;
     Receipt? receipt;
-    AccessInfo? accessInfo;
+    bool? hasData;
 
-    RecentReceipts({this.month, this.year, this.monthName, this.summary, this.receipt, this.accessInfo});
+    RecentReceipts({this.month, this.year, this.monthName, this.summary, this.salaryDetails, this.receipt, this.hasData});
 
     RecentReceipts.fromJson(Map<String, dynamic> json) {
         month = json["month"];
         year = json["year"];
         monthName = json["monthName"];
         summary = json["summary"] == null ? null : Summary.fromJson(json["summary"]);
+        salaryDetails = json["salaryDetails"] == null ? null : SalaryDetails.fromJson(json["salaryDetails"]);
         receipt = json["receipt"] == null ? null : Receipt.fromJson(json["receipt"]);
-        accessInfo = json["accessInfo"] == null ? null : AccessInfo.fromJson(json["accessInfo"]);
+        hasData = json["hasData"];
     }
 
     Map<String, dynamic> toJson() {
@@ -73,31 +75,13 @@ class RecentReceipts {
         if(summary != null) {
             _data["summary"] = summary?.toJson();
         }
+        if(salaryDetails != null) {
+            _data["salaryDetails"] = salaryDetails?.toJson();
+        }
         if(receipt != null) {
             _data["receipt"] = receipt?.toJson();
         }
-        if(accessInfo != null) {
-            _data["accessInfo"] = accessInfo?.toJson();
-        }
-        return _data;
-    }
-}
-
-class AccessInfo {
-    bool? isTemporaryAccess;
-    bool? isRecentMonth;
-
-    AccessInfo({this.isTemporaryAccess, this.isRecentMonth});
-
-    AccessInfo.fromJson(Map<String, dynamic> json) {
-        isTemporaryAccess = json["isTemporaryAccess"];
-        isRecentMonth = json["isRecentMonth"];
-    }
-
-    Map<String, dynamic> toJson() {
-        final Map<String, dynamic> _data = <String, dynamic>{};
-        _data["isTemporaryAccess"] = isTemporaryAccess;
-        _data["isRecentMonth"] = isRecentMonth;
+        _data["hasData"] = hasData;
         return _data;
     }
 }
@@ -105,6 +89,7 @@ class AccessInfo {
 class Receipt {
     String? receiptNumber;
     String? signatureStatus;
+    String? signatureType;
     String? signedAt;
     String? receiptStatus;
     String? fileName;
@@ -113,11 +98,12 @@ class Receipt {
     String? downloadUrl;
     bool? storedInS3;
 
-    Receipt({this.receiptNumber, this.signatureStatus, this.signedAt, this.receiptStatus, this.fileName, this.generatedAt, this.s3Key, this.downloadUrl, this.storedInS3});
+    Receipt({this.receiptNumber, this.signatureStatus, this.signatureType, this.signedAt, this.receiptStatus, this.fileName, this.generatedAt, this.s3Key, this.downloadUrl, this.storedInS3});
 
     Receipt.fromJson(Map<String, dynamic> json) {
         receiptNumber = json["receiptNumber"];
         signatureStatus = json["signatureStatus"];
+        signatureType = json["signatureType"];
         signedAt = json["signedAt"];
         receiptStatus = json["receiptStatus"];
         fileName = json["fileName"];
@@ -131,6 +117,7 @@ class Receipt {
         final Map<String, dynamic> _data = <String, dynamic>{};
         _data["receiptNumber"] = receiptNumber;
         _data["signatureStatus"] = signatureStatus;
+        _data["signatureType"] = signatureType;
         _data["signedAt"] = signedAt;
         _data["receiptStatus"] = receiptStatus;
         _data["fileName"] = fileName;
@@ -142,7 +129,48 @@ class Receipt {
     }
 }
 
+class SalaryDetails {
+    int? basicSalary;
+    int? normalOvertimeAmount;
+    int? holidayOvertimeAmount;
+    int? otherPaymentsTotal;
+    int? otherDeductionsTotal;
+    int? grossSalary;
+    int? totalDeductions;
+    int? netPayable;
+    String? paymentMode;
+
+    SalaryDetails({this.basicSalary, this.normalOvertimeAmount, this.holidayOvertimeAmount, this.otherPaymentsTotal, this.otherDeductionsTotal, this.grossSalary, this.totalDeductions, this.netPayable, this.paymentMode});
+
+    SalaryDetails.fromJson(Map<String, dynamic> json) {
+        basicSalary = json["basicSalary"];
+        normalOvertimeAmount = json["normalOvertimeAmount"];
+        holidayOvertimeAmount = json["holidayOvertimeAmount"];
+        otherPaymentsTotal = json["otherPaymentsTotal"];
+        otherDeductionsTotal = json["otherDeductionsTotal"];
+        grossSalary = json["grossSalary"];
+        totalDeductions = json["totalDeductions"];
+        netPayable = json["netPayable"];
+        paymentMode = json["paymentMode"];
+    }
+
+    Map<String, dynamic> toJson() {
+        final Map<String, dynamic> _data = <String, dynamic>{};
+        _data["basicSalary"] = basicSalary;
+        _data["normalOvertimeAmount"] = normalOvertimeAmount;
+        _data["holidayOvertimeAmount"] = holidayOvertimeAmount;
+        _data["otherPaymentsTotal"] = otherPaymentsTotal;
+        _data["otherDeductionsTotal"] = otherDeductionsTotal;
+        _data["grossSalary"] = grossSalary;
+        _data["totalDeductions"] = totalDeductions;
+        _data["netPayable"] = netPayable;
+        _data["paymentMode"] = paymentMode;
+        return _data;
+    }
+}
+
 class Summary {
+    int? daysPresent;
     int? daysWorked;
     int? totalWorkHours;
     int? totalNormalOvertime;
@@ -152,9 +180,10 @@ class Summary {
     int? totalDeductions;
     int? netPayable;
 
-    Summary({this.daysWorked, this.totalWorkHours, this.totalNormalOvertime, this.totalHolidayOvertime, this.basicSalary, this.totalEarnings, this.totalDeductions, this.netPayable});
+    Summary({this.daysPresent, this.daysWorked, this.totalWorkHours, this.totalNormalOvertime, this.totalHolidayOvertime, this.basicSalary, this.totalEarnings, this.totalDeductions, this.netPayable});
 
     Summary.fromJson(Map<String, dynamic> json) {
+        daysPresent = json["daysPresent"];
         daysWorked = json["daysWorked"];
         totalWorkHours = json["totalWorkHours"];
         totalNormalOvertime = json["totalNormalOvertime"];
@@ -167,6 +196,7 @@ class Summary {
 
     Map<String, dynamic> toJson() {
         final Map<String, dynamic> _data = <String, dynamic>{};
+        _data["daysPresent"] = daysPresent;
         _data["daysWorked"] = daysWorked;
         _data["totalWorkHours"] = totalWorkHours;
         _data["totalNormalOvertime"] = totalNormalOvertime;
@@ -186,8 +216,10 @@ class Employee {
     String? role;
     dynamic phone;
     String? department;
+    dynamic projectRoleId;
+    int? totalSalary;
 
-    Employee({this.id, this.employeeId, this.name, this.role, this.phone, this.department});
+    Employee({this.id, this.employeeId, this.name, this.role, this.phone, this.department, this.projectRoleId, this.totalSalary});
 
     Employee.fromJson(Map<String, dynamic> json) {
         id = json["_id"];
@@ -196,6 +228,9 @@ class Employee {
         role = json["role"];
         phone = json["phone"];
         department = json["department"];
+        projectRoleId = json["project_role_id"];
+        totalSalary = json["total_salary"];
+        id = json["id"];
     }
 
     Map<String, dynamic> toJson() {
@@ -206,6 +241,9 @@ class Employee {
         _data["role"] = role;
         _data["phone"] = phone;
         _data["department"] = department;
+        _data["project_role_id"] = projectRoleId;
+        _data["total_salary"] = totalSalary;
+        _data["id"] = id;
         return _data;
     }
 }
