@@ -43,6 +43,9 @@ dependencies:
   image_picker: ^1.0.7
   signature:
   month_picker_dialog:
+  path_provider: ^2.1.2
+  permission_handler: ^11.3.0
+  open_filex: ^4.4.0
 
 
 

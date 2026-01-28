@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:gharshub/controller/recent_receipt_controller.dart';
+import 'package:gharshub/controller/recipt_controller/recent_receipt_controller.dart';
 import 'package:gharshub/core/app_colors.dart';
 import 'package:gharshub/custom_widgets/app_button.dart';
 import 'package:gharshub/custom_widgets/app_text.dart';
@@ -16,6 +16,12 @@ class RecentReceiptWidget extends StatefulWidget {
 
 class _RecentReceiptWidgetState extends State<RecentReceiptWidget> {
   final recentReceiptController = Get.put(RecentReceiptController());
+  int getMonthIndex(String? isoDate) {
+    if (isoDate == null || isoDate.isEmpty) return 0;
+    final date = DateTime.parse(isoDate);
+    return date.month - 1; // API expects 0-based month
+  }
+
   @override
   void initState() {
     recentReceiptController.getRecentReceipt();
@@ -482,6 +488,51 @@ class _RecentReceiptWidgetState extends State<RecentReceiptWidget> {
                                                   "",
                                             ),
                                           ),
+                                          SizedBox(height: 10),
+
+                                          SizedBox(
+                                            width: double.infinity,
+                                            child: ElevatedButton.icon(
+                                              icon: const Icon(
+                                                Icons.download,
+                                                color: Colors.white, // ✅ WHITE ICON
+                                              ),
+                                              label: const Text(
+                                                "Download Receipt",
+                                                style: TextStyle(
+                                                  color: Colors.white, // ✅ WHITE TEXT
+                                                  fontWeight: FontWeight.w600,
+                                                ),
+                                              ),
+                                              style: ElevatedButton.styleFrom(
+                                                backgroundColor: AppColors.buttonColor,
+                                                padding: const EdgeInsets.symmetric(vertical: 12),
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius: BorderRadius.circular(10),
+                                                ),
+                                              ),
+                                              onPressed: () {
+                                                final receipt = recentReceiptController
+                                                    .receiptModel
+                                                    ?.data
+                                                    ?.recentReceipts?[index];
+
+                                                if (receipt == null) return;
+
+                                                final year =
+                                                    DateTime.parse(receipt.receipt!.signedAt!).year;
+
+                                                final month = getMonthIndex(receipt.receipt!.signedAt);
+
+                                                recentReceiptController.downloadReceipt(
+                                                  month: month,
+                                                  year: year,
+                                                );
+                                              },
+                                            ),
+
+                                          ),
+
                                           // AppText(
                                           //   " Total Work hours :${recentReceiptController.receiptModel?.data?.recentReceipts?[index].summary?.totalWorkHours}",
                                           //   fontheight: 2,
