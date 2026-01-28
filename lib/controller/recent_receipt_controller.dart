@@ -4,6 +4,7 @@ import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:get/state_manager.dart';
 import 'package:gharshub/core/storage_keys.dart';
 import 'package:gharshub/models/my_recent_receipt.dart';
+import 'package:gharshub/models/submit_request_model.dart';
 import 'package:gharshub/services/recent_receipt_service.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -12,6 +13,7 @@ import 'package:month_picker_dialog/month_picker_dialog.dart';
 
 class RecentReceiptController extends GetxController {
   RecentReceiptModel? receiptModel;
+  SubmitRequestModel? submitRequestModel;
   bool isLoading = false;
   TextEditingController reasonReceiptCtlr = TextEditingController();
   setLoader(status) {
@@ -47,27 +49,52 @@ class RecentReceiptController extends GetxController {
     }
   }
 
+  Future<void> submitRequestReceipt() async {
+    setLoader(true);
+    try {
+      final token = await _getToken();
+      print("$selectedMonth $selectedYear ${reasonReceiptCtlr.text}");
+      final res = await RecentReceiptService().submitRequestReceipt(
+        token: token,
+        month: selectedMonth,
+        year: selectedYear,
+        reason: reasonReceiptCtlr.text
+      );
+      submitRequestModel = res;
+      setLoader(false);
+      setReceiptRequest(false);
+      print(res);
+      Get.snackbar("Request Status", "${submitRequestModel?.message}");
+    } catch (e) {
+      setLoader(false);
+      Get.snackbar(
+        "Punch Status",
+        e.toString().replaceAll("Exception:", "").trim(),
+      );
+    }
+  }
+
   @override
   void onInit() {
     getRecentReceipt();
     super.onInit();
   }
 
-String? selectedMonth;
-int selectedYear = DateTime.now().year;
+  String? selectedMonth;
+  int selectedYear = DateTime.now().year;
 
-final List<String> months = [
-  'January',
-  'February',
-  'March',
-  'April',
-  'May',
-  'June',
-  'July',
-  'August',
-  'September',
-  'October',
-  'November',
-  'December',
-];
+  final List<String> months = [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
+  ];
 }
