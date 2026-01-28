@@ -8,6 +8,7 @@ import '../../core/storage_keys.dart';
 import '../../models/leave/latest_leave_model.dart';
 import '../../models/punch/punch_toggle_model.dart';
 import '../../services/leave/leave_service.dart';
+import '../../services/leave/recent_leave_service.dart';
 import '../../services/punch/PunchService.dart';
 
 class DashboardController extends GetxController {
@@ -36,6 +37,10 @@ class DashboardController extends GetxController {
 
   RxInt notificationCount = 0.obs;
   Rx<LeaveModel?> latestLeave = Rx<LeaveModel?>(null);
+
+  RxInt recentLeaveDays = 0.obs;
+  RxBool isLeaveLoading = false.obs;
+  final RecentLeaveService _recentLeaveService = RecentLeaveService();
 
   Future<String> _getToken() async {
     final prefs = await SharedPreferences.getInstance();
@@ -307,7 +312,40 @@ class DashboardController extends GetxController {
       notificationCount.value = 0;
     }
   }
+  Future<void> fetchRecentLeaves() async {
+    try {
+      isLeaveLoading.value = true;
 
+      final prefs = await SharedPreferences.getInstance();
+      final token = prefs.getString(StorageKeys.token) ?? "";
+
+      print("🔑 RECENT LEAVE TOKEN LENGTH => ${token.length}");
+
+      if (token.isEmpty) {
+        print("❌ TOKEN EMPTY");
+        return;
+      }
+
+      final res = await _recentLeaveService.getRecentLeaves(token: token);
+
+      print("📦 RECENT LEAVE COUNT => ${res.recentLeaves.length}");
+      print("📦 RECENT LEAVE TOTAL => ${res.total}");
+
+      if (res.recentLeaves.isNotEmpty) {
+        print("📦 FIRST LEAVE DAYS => ${res.recentLeaves.first.numberOfDays}");
+        recentLeaveDays.value = res.recentLeaves.first.numberOfDays;
+      } else {
+        recentLeaveDays.value = 0;
+      }
+
+      print("✅ recentLeaveDays SET TO => ${recentLeaveDays.value}");
+    } catch (e) {
+      print("❌ FETCH RECENT LEAVE ERROR => $e");
+      recentLeaveDays.value = 0;
+    } finally {
+      isLeaveLoading.value = false;
+    }
+  }
 
   void openNotificationPopup() {
     if (latestLeave.value == null) {
@@ -386,6 +424,8 @@ class DashboardController extends GetxController {
     _startCurrentClock();
     fetchMonthlyDaysWorked();
     fetchMonthlySummary();
+    print("🚀 DashboardController onInit");
+    fetchRecentLeaves();
   }
 
   @override

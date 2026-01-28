@@ -203,12 +203,26 @@ class DashboardPage extends StatelessWidget {
                     widget: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Padding(
-                          padding: const EdgeInsets.only(left: 28.0),
-                          child: Column(
-                            children: [reusableRowTile("Leave Balance ", '6')],
-                          ),
-                        ),
+                        Obx(() {
+                          if (controller.isLeaveLoading.value) {
+                            return const Padding(
+                              padding: EdgeInsets.only(left: 28.0),
+                              child: CircularProgressIndicator(strokeWidth: 2),
+                            );
+                          }
+
+                          return Padding(
+                            padding: const EdgeInsets.only(left: 28.0),
+                            child: Column(
+                              children: [
+                                reusableRowTile(
+                                  "Recent Leave Days",
+                                  controller.recentLeaveDays.value.toString(),
+                                ),
+                              ],
+                            ),
+                          );
+                        }),
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: CustomButton(
@@ -224,6 +238,7 @@ class DashboardPage extends StatelessWidget {
                       ],
                     ),
                   ),
+
 
                   SizedBox(height: 15),
                   AttendanceWidget(),

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:gharshub/controller/dashboard/leave_controller.dart';
+import 'package:gharshub/controller/leave/leave_controller.dart';
 import 'package:gharshub/core/app_colors.dart';
 import 'package:gharshub/custom_widgets/app_button.dart';
 import 'package:gharshub/custom_widgets/app_text.dart';
@@ -9,13 +11,23 @@ import 'package:gharshub/screen/salary_details/recent_receipt_widget.dart';
 import '../../controller/dashboard/dashboard_controller.dart';
 import '../../controller/dashboard/timesheet/monthly_timesheet_controller.dart';
 
-class SalaryDetailsPage extends StatelessWidget {
+class SalaryDetailsPage extends StatefulWidget {
   SalaryDetailsPage({super.key});
 
+  @override
+  State<SalaryDetailsPage> createState() => _SalaryDetailsPageState();
+}
+
+class _SalaryDetailsPageState extends State<SalaryDetailsPage> {
   final MonthlyTimesheetController timesheetController = Get.put(
     MonthlyTimesheetController(),
   );
-
+final leaveCtlr = Get.put(LeavesController());
+@override
+  void initState() {
+   leaveCtlr.currentLeave();
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -78,6 +90,12 @@ class SalaryDetailsPage extends StatelessWidget {
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+             leaveCtlr.currentLeaveModel?.currentLeave == null?Container():   Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    child: AppText("${leaveCtlr.currentLeaveModel?.currentLeave}"),
+                  ),
+                ),
                 Container(
                   width: double.infinity,
                   padding: const EdgeInsets.symmetric(

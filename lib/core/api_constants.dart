@@ -50,4 +50,8 @@ class ApiConstants {
       ) =>
       "$baseUrl/api/salary-receipts/signature/$employeeId/$month/$year";
 
+  static const String profile =
+      "$baseUrl/api/auth/profile";
+
+  static const String currentLeave = "$baseUrl/api/technician/current-leave-status";
 }

@@ -1,6 +1,7 @@
 import 'package:app_links/app_links.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:gharshub/screen/dashboard/bottom_nav_bar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:gharshub/core/storage_keys.dart';
@@ -55,7 +56,8 @@ class _MyAppState extends State<MyApp> {
         if (!Get.isRegistered<DashboardController>()) {
           Get.put(DashboardController(), permanent: true);
         }
-        _startPage = DashboardPage();
+        // _startPage = DashboardPage();
+         _startPage = CustomNavigationBarUI();
       }
     } else {
       await prefs.clear();
