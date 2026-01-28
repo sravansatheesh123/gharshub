@@ -3,7 +3,12 @@ import 'package:gharshub/core/app_colors.dart';
 import 'package:gharshub/custom_widgets/app_text.dart';
 
 class SuperVisorAppBar extends StatelessWidget {
-  const SuperVisorAppBar({super.key});
+  final VoidCallback? onTapLogout;
+
+  const SuperVisorAppBar({
+    super.key,
+    this.onTapLogout,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +20,14 @@ class SuperVisorAppBar extends StatelessWidget {
       ),
       title: AppText("Gharshub", fontSize: 18),
       actions: [
-        IconButton(onPressed: () {}, icon: const Icon(Icons.notifications)),
+        IconButton(
+          onPressed: () {},
+          icon: const Icon(Icons.notifications),
+        ),
+        IconButton(
+          onPressed: onTapLogout,
+          icon: const Icon(Icons.logout),
+        ),
       ],
       backgroundColor: AppColors.whiteColor,
       elevation: 3,

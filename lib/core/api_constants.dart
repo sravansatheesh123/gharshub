@@ -15,6 +15,10 @@ class ApiConstants {
       "$baseUrl/api/hr/salary-details/$employeeId/$year";
   static const String monthlyTimesheet = "$baseUrl/api/punch/monthly-timesheet";
 
+  //web///
+  static String generateWebSigningToken(int month, int year) =>
+      "$baseUrl/api/technician/generate-web-signing-token/$month/$year";
+
   ////supervisor////
   static const String supervisorDashboardSummary =
       "$baseUrl/api/site-supervisor/dashboard/summary";
