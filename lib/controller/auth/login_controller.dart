@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:gharshub/screen/dashboard/bottom_nav_bar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../core/storage_keys.dart';
@@ -88,7 +89,9 @@ class LoginController extends GetxController {
         if (!Get.isRegistered<DashboardController>()) {
           Get.put(DashboardController(), permanent: true);
         }
-        Get.offAll(() => DashboardPage());
+        // Get.offAll(() => DashboardPage());
+        Get.offAll(() => CustomNavigationBarUI());
+        
       }
     } catch (e) {
       Get.snackbar(

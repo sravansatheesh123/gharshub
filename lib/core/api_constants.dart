@@ -35,16 +35,15 @@ class ApiConstants {
       "$baseUrl/api/salary-receipts/my-recent-receipts";
   static const String submitRecentReceipt =
       "$baseUrl/api/receipt-requests/request";
-        static const String myRequest =
-      "$baseUrl/api/receipt-requests/my-requests";
-             static const String accessableReceipt =
+  static const String myRequest = "$baseUrl/api/receipt-requests/my-requests";
+  static const String accessableReceipt =
       "$baseUrl/api/receipt-requests/accessible-receipts";
 
-  static String downloadRecentReceipt(
-      String employeeId,
-      int month,
-      int year,
-      ) =>
+  static String downloadRecentReceipt(String employeeId, int month, int year) =>
       "$baseUrl/api/salary-receipts/download-url/$employeeId/$month/$year";
 
+  static const String profile =
+      "$baseUrl/api/auth/profile";
+
+      static const String currentLeave = "$baseUrl/api/technician/current-leave-status";
 }
