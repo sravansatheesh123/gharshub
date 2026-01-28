@@ -41,4 +41,41 @@ class PayslipService {
       rethrow;
     }
   }
+
+  Future<Map<String, dynamic>> uploadSignature({
+    required String token,
+    required String employeeId,
+    required int month,
+    required int year,
+    required String fileData, // data:image/png;base64,...
+  }) async {
+    final url = Uri.parse(
+      ApiConstants.submitSignature(employeeId, month, year),
+    );
+
+    print("📌 uploadSignature API URL => $url");
+
+    final response = await http.post(
+      url,
+      headers: {
+        "Authorization": "Bearer $token",
+        "Content-Type": "application/json",
+      },
+      body: jsonEncode({
+        "signatureType": "upload",
+        "fileName": "signature.png",
+        "fileData": fileData,
+      }),
+    );
+
+    print("📥 uploadSignature Status => ${response.statusCode}");
+    print("📥 uploadSignature Response => ${response.body}");
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      return jsonDecode(response.body);
+    } else {
+      throw Exception("Signature upload failed: ${response.body}");
+    }
+  }
+
 }

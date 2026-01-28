@@ -127,27 +127,79 @@ class PayslipController extends GetxController {
     signatureImage.value = null;
   }
 
-  Future<void> saveSignature() async {
+  Future<void> saveSignature({
+    required String employeeId,
+    required int month,
+    required int year,
+  }) async {
     print("🖊️ saveSignature() called");
+    if (payslipData.value?.signatureStatus == "signed") {
+      Get.snackbar(
+        "Already Signed",
+        "This payslip is already signed",
+        snackPosition: SnackPosition.BOTTOM,
+      );
+      return;
+    }
 
-    if (signatureController.isNotEmpty) {
-      final image = await signatureController.toPngBytes();
-      final imageBytes = await signatureController.toPngBytes();
-
-      // ✅ file name
-      final String fileName = "signature.png";
-
-      signatureImage.value = image;
-
-      final String signatureType = "upload";
-      final String base64Data = base64Encode(imageBytes!);
-      final String fileData = "data:image/png;base64,$base64Data";
-      print(fileData);
-      post_signature_to_backend(fileData);
-    } else {
+    if (signatureController.isEmpty) {
       print("⚠️ Signature controller is empty");
+      Get.snackbar("Error", "Please sign before saving");
+      return;
+    }
+
+    try {
+      isLoading.value = true;
+
+      // 🔹 Capture signature
+      final imageBytes = await signatureController.toPngBytes();
+      if (imageBytes == null) {
+        throw Exception("Failed to capture signature");
+      }
+
+      signatureImage.value = imageBytes;
+
+      // 🔹 BASE64 CONVERSION (SAME AS OLD CODE)
+      final String base64Data = base64Encode(imageBytes);
+      final String fileData = "data:image/png;base64,$base64Data";
+
+      print("📦 Base64 Length => ${fileData.length}");
+
+      // ❌ OLD METHOD (COMMENTED – DO NOT USE)
+      /*
+    post_signature_to_backend(fileData);
+    */
+
+      final token = await _getToken();
+      if (token.isEmpty) {
+        Get.snackbar("Auth Error", "Token missing. Login again.");
+        return;
+      }
+
+      final response = await _service.uploadSignature(
+        token: token,
+        employeeId: employeeId,
+        month: month,
+        year: year,
+        fileData: fileData,
+      );
+
+      Get.snackbar(
+        "Signature",
+        response["message"] ?? "Signature uploaded successfully",
+      );
+
+    } catch (e) {
+      print("❌ saveSignature ERROR => $e");
+      Get.snackbar(
+        "Error",
+        e.toString().replaceAll("Exception:", ""),
+      );
+    } finally {
+      isLoading.value = false;
     }
   }
+
 
   @override
   void onClose() {
@@ -155,45 +207,90 @@ class PayslipController extends GetxController {
     super.onClose();
   }
 
-  post_signature_to_backend(
-    // String employeeId,
-    // String month,
-    // String year,
-    String fileData, // data:image/png;base64,...
-  ) async {
-    final prefs = await SharedPreferences.getInstance();
-    final token = prefs.getString(StorageKeys.token) ?? "";
-    final url = Uri.parse(
-      'https://api.gharshub.com/api/salary-receipts/signature/6977434079760c6e6b90eadc/0/2027',
-      // 'https://api.gharshub.com/api/salary-receipts/signature/$employeeId/$month/$year',
-    );
+  /*
+ LEGACY CODE – DO NOT USE
+This was written by previous developer.
+Kept only for reference.
 
-    print("📌 uploadSignature called");
-    print("📌 URL => $url");
+post_signature_to_backend(
+  String fileData,
+) async {
+  final prefs = await SharedPreferences.getInstance();
+  final token = prefs.getString(StorageKeys.token) ?? "";
+  final url = Uri.parse(
+    'https://api.gharshub.com/api/salary-receipts/signature/6977434079760c6e6b90eadc/0/2027',
+  );
 
-    final headers = {
-      'Authorization': 'Bearer $token',
-      'Content-Type': 'application/json',
-    };
+  final headers = {
+    'Authorization': 'Bearer $token',
+    'Content-Type': 'application/json',
+  };
 
-    final body = jsonEncode({
-      "signatureType": "upload",
-      "fileName": "signature.png",
-      "fileData": fileData,
-    });
+  final body = jsonEncode({
+    "signatureType": "upload",
+    "fileName": "signature.png",
+    "fileData": fileData,
+  });
 
-    print("📤 Request Body Keys => signatureType, fileName, fileData");
-    print("📦 fileData length => ${fileData.length}");
+  final response = await http.post(url, headers: headers, body: body);
 
-    final response = await http.post(url, headers: headers, body: body);
+  if (response.statusCode != 200) {
+    throw Exception("Signature upload failed");
+  }
+}
+*/
+  Future<void> saveSignatureUsingService({
+    required String employeeId,
+    required int month,
+    required int year,
+  }) async {
+    try {
+      print("🖊️ saveSignatureUsingService() called");
 
-    print("📥 Status Code => ${response.statusCode}");
-    print("📥 Response Body => ${response.body}");
-    final decoded = jsonDecode(response.body);
-    Get.snackbar('Signature Alert','${decoded['message']}');
+      if (signatureController.isEmpty) {
+        Get.snackbar("Error", "Please sign before submitting");
+        return;
+      }
 
-    if (response.statusCode != 200) {
-      throw Exception("Signature upload failed");
+      isLoading.value = true;
+
+      final token = await _getToken();
+      if (token.isEmpty) {
+        Get.snackbar("Auth Error", "Token missing. Login again.");
+        return;
+      }
+
+      final imageBytes = await signatureController.toPngBytes();
+      if (imageBytes == null) {
+        throw Exception("Failed to capture signature image");
+      }
+
+      final base64Data = base64Encode(imageBytes);
+      final fileData = "data:image/png;base64,$base64Data";
+
+      final response = await _service.uploadSignature(
+        token: token,
+        employeeId: employeeId,
+        month: month,
+        year: year,
+        fileData: fileData,
+      );
+
+      print("✅ Signature Uploaded => $response");
+
+      Get.snackbar(
+        "Signature",
+        response["message"] ?? "Signature uploaded successfully",
+      );
+
+    } catch (e, s) {
+      print("❌ saveSignatureUsingService ERROR => $e");
+      print("❌ STACKTRACE => $s");
+
+      Get.snackbar("Error", e.toString().replaceAll("Exception:", ""));
+    } finally {
+      isLoading.value = false;
     }
   }
+
 }

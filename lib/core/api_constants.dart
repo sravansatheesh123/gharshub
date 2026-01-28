@@ -43,4 +43,11 @@ class ApiConstants {
       ) =>
       "$baseUrl/api/salary-receipts/download-url/$employeeId/$month/$year";
 
+  static String submitSignature(
+      String employeeId,
+      int month,
+      int year,
+      ) =>
+      "$baseUrl/api/salary-receipts/signature/$employeeId/$month/$year";
+
 }

@@ -20,6 +20,8 @@ class PayslipWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final PayslipController controller = Get.put(PayslipController());
+    final int yearInt = int.parse(year);
+    final int month = DateTime.now().month;
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       controller.fetchSalaryDetails(
@@ -231,7 +233,11 @@ class PayslipWidget extends StatelessWidget {
                 const SizedBox(height: 10),
                 _reusableContainer(
                   title: "Employee Signature",
-                  childWidget: Column(children: [DigitalSignatureWidget()]),
+                  childWidget: DigitalSignatureWidget(
+                    employeeId: employeeId,
+                    month: month,
+                    year: yearInt,
+                  ),
                 ),
               ],
             ),

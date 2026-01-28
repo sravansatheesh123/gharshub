@@ -31,6 +31,10 @@ class PayslipData {
   final double totalEarnings;
   final double netPayable;
 
+  final String? signatureStatus;
+  final String? receiptStatus;
+  final String? downloadUrl;
+
   PayslipData({
     required this.basicSalary,
     required this.perDaySalary,
@@ -54,6 +58,10 @@ class PayslipData {
     required this.totalDeductions,
     required this.totalEarnings,
     required this.netPayable,
+    this.signatureStatus,
+    this.receiptStatus,
+    this.downloadUrl,
+
   });
 
   factory PayslipData.fromJson(Map<String, dynamic> json) {
@@ -87,6 +95,10 @@ class PayslipData {
       totalDeductions: _toDouble(json["totalDeductions"]),
       totalEarnings: _toDouble(json["totalEarnings"]),
       netPayable: _toDouble(json["netPayable"]),
+
+      signatureStatus: json["signatureStatus"],
+      receiptStatus: json["receiptStatus"],
+      downloadUrl: json["downloadUrl"],
     );
   }
 }
