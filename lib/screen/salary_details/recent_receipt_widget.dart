@@ -19,6 +19,8 @@ class _RecentReceiptWidgetState extends State<RecentReceiptWidget> {
   @override
   void initState() {
     recentReceiptController.getRecentReceipt();
+    recentReceiptController.myRequest();
+    recentReceiptController.accessableRequest();
     super.initState();
   }
 
@@ -189,6 +191,50 @@ class _RecentReceiptWidgetState extends State<RecentReceiptWidget> {
                         ),
                       ),
                     ),
+                    recentReceiptController
+                                .myRequestModel
+                                ?.data
+                                ?.requests
+                                ?.length ==
+                            0
+                        ? Container()
+                        : Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: AppColors.lightAmberColor,
+                              ),
+                              padding: const EdgeInsets.all(8.0),
+                              width: double.infinity,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  AppText(
+                                    "Your Request (${recentReceiptController.myRequestModel?.data?.requests?.length})",
+                                  ),
+                                  Row(
+                                    children: [
+                                      AppText(
+                                        formatAppDate(
+                                          recentReceiptController
+                                              .myRequestModel
+                                              ?.data
+                                              ?.requests?[0]
+                                              .approvedAt,
+                                        ),
+                                        fontheight: 2,
+                                      ),
+                                      SizedBox(width: 10),
+                                      AppText(
+                                        "${recentReceiptController.myRequestModel?.data?.requests?[0].timeRemaining?.hours}hr ${recentReceiptController.myRequestModel?.data?.requests?[0].timeRemaining?.minutes} mn remaining",
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
 
                     // ignore: prefer_is_empty
                     recentReceiptController
@@ -505,10 +551,320 @@ class _RecentReceiptWidgetState extends State<RecentReceiptWidget> {
                                       ),
                                     ),
                                   ),
+
+
+                               
                                 ],
                               ),
                             ),
                           ),
+
+
+                             Padding(
+                               padding: const EdgeInsets.all(8.0),
+                               child: Container(
+    width: double.infinity,
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 16,
+                                vertical: 16,
+                              ),
+                              decoration: BoxDecoration(
+                                color: AppColors.whiteColor,
+                                borderRadius: BorderRadius.circular(12),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: AppColors.blackColor.withOpacity(
+                                      0.08,
+                                    ),
+                                    blurRadius: 12,
+                                    spreadRadius: 2,
+                                    offset: const Offset(0, 4),
+                                  ),
+                                ],
+                              ),
+
+                                 child: ListView.builder(
+                                        itemCount: recentReceiptController
+                                            .accessableReceiptModel
+                                            ?.data
+                                            ?.recentReceipts
+                                            ?.length,
+                                        shrinkWrap: true,
+                                        physics: NeverScrollableScrollPhysics(),
+                                        itemBuilder: (context, index) => Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              ListTile(
+                                                contentPadding: EdgeInsets.only(
+                                                  left: 0,
+                                                ),
+                                                leading: Padding(
+                                                  padding: const EdgeInsets.only(
+                                                    bottom: 8.0,
+                                                  ),
+                                                  child: Icon(
+                                                    Icons.calendar_view_day_rounded,
+                                                    color: AppColors.buttonColor,
+                                                  ),
+                                                ),
+                                                subtitle: AppText(
+                                                  recentReceiptController
+                                                      .accessableReceiptModel
+                                                      ?.data
+                                                      ?.recentReceipts?[index]
+                                                      .receipt
+                                                      ?.receiptNumber,
+                                                  fontSize: 10,
+                                                  color: AppColors.lightgrayColor,
+                                                ),
+                                 
+                                                title: AppText(
+                                                  formatAppDate(
+                                                    recentReceiptController
+                                                        .accessableReceiptModel
+                                                        ?.data
+                                                        ?.recentReceipts?[index]
+                                                        .receipt
+                                                        ?.signedAt,
+                                                  ),
+                                                  color: AppColors.buttonColor,
+                                                ),
+                                                trailing: SizedBox(
+                                                  width: 120,
+                                                  child: Row(
+                                                    children: [
+                                                      Column(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .center,
+                                                        children: [
+                                                          AppText(
+                                                            "₹ ${recentReceiptController.accessableReceiptModel?.data?.recentReceipts?[index].summary?.netPayable.toString()}" ??
+                                                                "",
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            color:
+                                                                const Color.fromARGB(
+                                                                  255,
+                                                                  11,
+                                                                  133,
+                                                                  17,
+                                                                ),
+                                                          ),
+                                                          AppText(
+                                                            "Net payable",
+                                                            fontSize: 10,
+                                                            color: AppColors
+                                                                .lightgrayColor,
+                                                          ),
+                                                        ],
+                                                      ),
+                                                      SizedBox(width: 10),
+                                                      Container(
+                                                        decoration: BoxDecoration(
+                                                          color: AppColors
+                                                              .lightGreenColor,
+                                                          borderRadius:
+                                                              BorderRadius.circular(
+                                                                7,
+                                                              ),
+                                                        ),
+                                                        padding:
+                                                            EdgeInsets.symmetric(
+                                                              horizontal: 2,
+                                                              vertical: 2,
+                                                            ),
+                                                        child: AppText(
+                                                          recentReceiptController
+                                                                  .accessableReceiptModel
+                                                                  ?.data
+                                                                  ?.recentReceipts?[index]
+                                                                  .receipt
+                                                                  ?.receiptStatus ??
+                                                              "",
+                                                          fontSize: 10,
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                              reusableTitleWidget(
+                                                Icons.work,
+                                                "Work Summary",
+                                              ),
+                                              ListTile(
+                                                minTileHeight: 30,
+                                                leading: AppText("Days :"),
+                                                trailing: AppText(
+                                                  recentReceiptController
+                                                          .accessableReceiptModel
+                                                          ?.data
+                                                          ?.recentReceipts?[index]
+                                                          .summary
+                                                          ?.daysWorked
+                                                          .toString() ??
+                                                      "",
+                                                ),
+                                              ),
+                                              ListTile(
+                                                minTileHeight: 30,
+                                                leading: AppText("Hours :"),
+                                                trailing: AppText(
+                                                  recentReceiptController
+                                                          .accessableReceiptModel
+                                                          ?.data
+                                                          ?.recentReceipts?[index]
+                                                          .summary
+                                                          ?.totalWorkHours
+                                                          .toString() ??
+                                                      "",
+                                                ),
+                                              ),
+                                              ListTile(
+                                                minTileHeight: 30,
+                                                leading: AppText("OT Hours :"),
+                                                trailing: AppText(
+                                                  recentReceiptController
+                                                          .accessableReceiptModel
+                                                          ?.data
+                                                          ?.recentReceipts?[index]
+                                                          .summary
+                                                          ?.totalHolidayOvertime
+                                                          .toString() ??
+                                                      "",
+                                                ),
+                                              ),
+                                              reusableTitleWidget(
+                                                Icons.payment,
+                                                "Salary Details",
+                                              ),
+                                              ListTile(
+                                                minTileHeight: 30,
+                                                leading: AppText("Gross :"),
+                                                trailing: AppText(
+                                                  recentReceiptController
+                                                          .accessableReceiptModel
+                                                          ?.data
+                                                          ?.recentReceipts?[index]
+                                                          .summary
+                                                          ?.totalEarnings
+                                                          .toString() ??
+                                                      "",
+                                                ),
+                                              ),
+                                              ListTile(
+                                                minTileHeight: 30,
+                                                leading: AppText("Deductions :"),
+                                                trailing: AppText(
+                                                  recentReceiptController
+                                                          .accessableReceiptModel
+                                                          ?.data
+                                                          ?.recentReceipts?[index]
+                                                          .summary
+                                                          ?.totalDeductions
+                                                          .toString() ??
+                                                      "",
+                                                ),
+                                              ),
+                                              Divider(),
+                                              ListTile(
+                                                minTileHeight: 30,
+                                                leading: AppText("Net :"),
+                                                trailing: AppText(
+                                                  recentReceiptController
+                                                          .accessableReceiptModel
+                                                          ?.data
+                                                          ?.recentReceipts?[index]
+                                                          .summary
+                                                          ?.netPayable
+                                                          .toString() ??
+                                                      "",
+                                                ),
+                                              ),
+                                              reusableTitleWidget(
+                                                Icons.receipt,
+                                                "Receipt Info ",
+                                              ),
+                                              ListTile(
+                                                minTileHeight: 30,
+                                                leading: AppText("Generated :"),
+                                                trailing: AppText(
+                                                  formatAppDate(
+                                                    recentReceiptController
+                                                            .accessableReceiptModel
+                                                            ?.data
+                                                            ?.recentReceipts?[index]
+                                                            .receipt
+                                                            ?.generatedAt
+                                                            .toString() ??
+                                                        "",
+                                                  ),
+                                                ),
+                                              ),
+                                              ListTile(
+                                                minTileHeight: 30,
+                                                leading: AppText("Signed :"),
+                                                trailing: AppText(
+                                                  formatAppDate(
+                                                    recentReceiptController
+                                                            .accessableReceiptModel
+                                                            ?.data
+                                                            ?.recentReceipts?[index]
+                                                            .receipt
+                                                            ?.signedAt
+                                                            .toString() ??
+                                                        "",
+                                                  ),
+                                                ),
+                                              ),
+                                              ListTile(
+                                                minTileHeight: 30,
+                                                leading: AppText("Status :"),
+                                                trailing: AppText(
+                                                  recentReceiptController
+                                                          .accessableReceiptModel
+                                                          ?.data
+                                                          ?.recentReceipts?[index]
+                                                          .receipt
+                                                          ?.signatureStatus
+                                                          .toString() ??
+                                                      "",
+                                                ),
+                                              ),
+                                              // AppText(
+                                              //   " Total Work hours :${recentReceiptController.receiptModel?.data?.recentReceipts?[index].summary?.totalWorkHours}",
+                                              //   fontheight: 2,
+                                              // ),
+                                              // AppText(
+                                              //   " Total salary :${recentReceiptController.receiptModel?.data?.recentReceipts?[index].summary?.basicSalary}",
+                                              //   fontheight: 2,
+                                              // ),
+                                              // AppText(
+                                              //   " Receipt status :${recentReceiptController.receiptModel?.data?.recentReceipts?[index].receipt?.receiptStatus}",
+                                              // ),
+                                              // AppText(
+                                              //   " Signature status :${recentReceiptController.receiptModel?.data?.recentReceipts?[index].receipt?.signatureStatus}",
+                                              //   fontheight: 2,
+                                              // ),
+                                              // AppText(
+                                              //   " file :${recentReceiptController.receiptModel?.data?.recentReceipts?[index].receipt?.fileName}",
+                                              //   fontheight: 2,
+                                              // ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                               ),
+                             ),
+
+
                   ],
                 ),
               ),
