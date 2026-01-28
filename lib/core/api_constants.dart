@@ -33,4 +33,6 @@ class ApiConstants {
 
   static const String getRecentReceipt =
       "$baseUrl/api/salary-receipts/my-recent-receipts";
+        static const String submitRecentReceipt =
+      "$baseUrl/api/receipt-requests/request";
 }

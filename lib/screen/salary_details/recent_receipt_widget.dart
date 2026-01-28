@@ -50,78 +50,115 @@ class _RecentReceiptWidgetState extends State<RecentReceiptWidget> {
                   children: [
                     Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        children: [
-                          CustomButton(
-                            onTap: controller.isEnableRequest == true
-                                //  submit  receipt --------------------------
-                                ? () {}
-                                //  request receipt --------------------------
-                                : () {
-                                    controller.setReceiptRequest(true);
-                                  },
-                            text: controller.isEnableRequest == true
-                                ? "Submit Request"
-                                : "+ Request Receipt",
-                          ),
-                          SizedBox(height: 10),
-                          Padding(
+                      child: CustomButton(
+                        onTap: controller.isEnableRequest == true
+                            //  submit  receipt --------------------------
+                            ? () {
+                                controller.setReceiptRequest(false);
+                              }
+                            //  request receipt --------------------------
+                            : () {
+                                controller.setReceiptRequest(true);
+                              },
+                        text: controller.isEnableRequest == true
+                            ? "Submit Request"
+                            : "+ Request Receipt",
+                      ),
+                    ),
+                    controller.isEnableRequest == false
+                        ? Container()
+                        : Padding(
                             padding: const EdgeInsets.all(8.0),
-                            child: Row(
+                            child: Column(
                               children: [
-                                Expanded(
-                                  child: DropdownButtonFormField<String>(
-                                    value: controller.selectedMonth,
-                                    hint: const Text('Select Month'),
-                                    items: controller.months.map((month) {
-                                      return DropdownMenuItem(
-                                        value: month,
-                                        child: Text(month),
-                                      );
-                                    }).toList(),
-                                    onChanged: (value) {
-                                      controller.selectedMonth = value;
-                                      // print(
-                                      //   'Selected Month: $controller.selectedMonth',
-                                      // );
-                                    },
-                                    decoration: const InputDecoration(
-                                      labelText: 'Month *',
-                                      border: OutlineInputBorder(),
-                                    ),
+                                SizedBox(height: 10),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Row(
+                                    children: [
+                                      Expanded(
+                                        child: DropdownButtonFormField<String>(
+                                          value: controller.selectedMonth,
+                                          hint: const Text('Select Month'),
+                                          items: controller.months.map((month) {
+                                            return DropdownMenuItem(
+                                              value: month,
+                                              child: Text(month),
+                                            );
+                                          }).toList(),
+                                          onChanged: (value) {
+                                            controller.selectedMonth = value;
+                                            // print(
+                                            //   'Selected Month: $controller.selectedMonth',
+                                            // );
+                                          },
+                                          decoration: const InputDecoration(
+                                            labelText: 'Month *',
+                                            border: OutlineInputBorder(),
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(width: 5),
+                                      Expanded(
+                                        child: DropdownButtonFormField<int>(
+                                          value: controller.selectedYear,
+                                          items: List.generate(5, (index) {
+                                            int year =
+                                                DateTime.now().year - index;
+                                            return DropdownMenuItem(
+                                              value: year,
+                                              child: Text(year.toString()),
+                                            );
+                                          }),
+                                          onChanged: (value) {
+                                            controller.selectedYear = value!;
+                                          },
+                                          decoration: const InputDecoration(
+                                            labelText: 'Year *',
+                                            border: OutlineInputBorder(),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
-                                SizedBox(width: 5),
-                                Expanded(
-                                  child: DropdownButtonFormField<int>(
-                                    value: controller.selectedYear,
-                                    items: List.generate(5, (index) {
-                                      int year = DateTime.now().year - index;
-                                      return DropdownMenuItem(
-                                        value: year,
-                                        child: Text(year.toString()),
-                                      );
-                                    }),
-                                    onChanged: (value) {
-                                      controller.selectedYear = value!;
-                                    },
-                                    decoration: const InputDecoration(
-                                      labelText: 'Year *',
-                                      border: OutlineInputBorder(),
-                                    ),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: CustomTextField(
+                                    title: "Reason for request",
+                                    isEnable: false,
+                                    textEditingController:
+                                        controller.reasonReceiptCtlr,
+                                    name: "Reason",
+                                    isThisFieldRequired: true,
                                   ),
+                                ),
+
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    CustomButton(
+                                      width: 100,
+                                      color: AppColors.lightgrayColor
+                                          .withOpacity(.2),
+                                      onTap: () {
+                                        controller.setReceiptRequest(false);
+                                      },
+                                      text: "Cancel",
+                                    ),
+                                    SizedBox(width: 10),
+                                    CustomButton(
+                                      width: 100,
+                                      onTap: () {
+                                        controller.submitRequestReceipt();
+                                      },
+                                      text: "Submit Request",
+                                    ),
+                                  ],
                                 ),
                               ],
                             ),
                           ),
-                          CustomTextField(
-                            textEditingController: controller.reasonReceiptCtlr,
-                            name: "Reason",
-                            isThisFieldRequired: true,
-                          ),
-                        ],
-                      ),
-                    ),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Container(
