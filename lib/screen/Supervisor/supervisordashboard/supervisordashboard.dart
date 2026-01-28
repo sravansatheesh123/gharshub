@@ -6,8 +6,10 @@ import 'package:gharshub/custom_widgets/app_button.dart';
 import 'package:gharshub/custom_widgets/app_text.dart';
 import 'package:gharshub/screen/Supervisor/make_attendance/make_attendance_page.dart';
 import 'package:gharshub/screen/Supervisor/projects/projects_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../controller/supervisor/supervisor_dashboard_controller.dart';
+import '../../auth/login_page.dart';
 
 class SupervisorDashboard extends StatelessWidget {
   const SupervisorDashboard({super.key});
@@ -20,8 +22,17 @@ class SupervisorDashboard extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColors.skyColor,
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(40),
-        child: SuperVisorAppBar(),
+        preferredSize: const Size.fromHeight(85),
+        child: SuperVisorAppBar(
+          onTapLogout: () async {
+            final prefs = await SharedPreferences.getInstance();
+            await prefs.clear();
+            if (Get.isRegistered<SupervisorDashboardController>()) {
+              Get.delete<SupervisorDashboardController>(force: true);
+            }
+            Get.offAll(() => LoginPage());
+          },
+        ),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -112,10 +123,7 @@ class SupervisorDashboard extends StatelessWidget {
                   ],
                 ),
               ),
-
               const SizedBox(height: 10),
-
-              // Assigned Projects
               Container(
                 width: double.infinity,
                 padding: const EdgeInsets.symmetric(

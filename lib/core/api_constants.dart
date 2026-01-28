@@ -15,6 +15,10 @@ class ApiConstants {
       "$baseUrl/api/hr/salary-details/$employeeId/$year";
   static const String monthlyTimesheet = "$baseUrl/api/punch/monthly-timesheet";
 
+  //web///
+  static String generateWebSigningToken(int month, int year) =>
+      "$baseUrl/api/technician/generate-web-signing-token/$month/$year";
+
   ////supervisor////
   static const String supervisorDashboardSummary =
       "$baseUrl/api/site-supervisor/dashboard/summary";
@@ -35,4 +39,12 @@ class ApiConstants {
       "$baseUrl/api/receipt-requests/my-requests";
              static const String accessableReceipt =
       "$baseUrl/api/receipt-requests/accessible-receipts";
+
+  static String downloadRecentReceipt(
+      String employeeId,
+      int month,
+      int year,
+      ) =>
+      "$baseUrl/api/salary-receipts/download-url/$employeeId/$month/$year";
+
 }

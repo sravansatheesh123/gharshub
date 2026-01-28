@@ -7,7 +7,7 @@ import 'package:gharshub/models/accessable_receipt_model.dart';
 import 'package:gharshub/models/my_recent_receipt.dart';
 import 'package:gharshub/models/my_request_model.dart';
 import 'package:gharshub/models/submit_request_model.dart';
-import 'package:gharshub/services/recent_receipt_service.dart';
+import 'package:gharshub/services/recent_receipt/recent_receipt_service.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -77,6 +77,40 @@ class RecentReceiptController extends GetxController {
       );
     }
   }
+  Future<void> downloadReceipt({
+    required int month,
+    required int year,
+  }) async {
+    try {
+      setLoader(true);
+
+      final token = await _getToken();
+      final employeeId = receiptModel?.data?.employee?.id;
+
+      if (employeeId == null) {
+        throw Exception("Employee ID not found");
+      }
+
+      await RecentReceiptService().downloadRecentReceiptPdf(
+        token: token,
+        employeeId: employeeId,
+        month: month,
+        year: year,
+      );
+
+      Get.snackbar("Success", "Receipt downloaded successfully");
+    }  catch (e, s) {
+  print("❌ DOWNLOAD ERROR: $e");
+  print("📌 STACKTRACE:");
+  print(s);
+
+  Get.snackbar("Error", e.toString());
+}
+finally {
+      setLoader(false);
+    }
+  }
+
 
   Future<void> myRequest() async {
     setLoader(true);
