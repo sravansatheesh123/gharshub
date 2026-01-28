@@ -32,5 +32,5 @@ class ApiConstants {
       "$baseUrl/api/site-supervisor/attendance/edit-punch";
 
   static const String getRecentReceipt =
-      "$baseUrl/api/receipt-requests/accessible-receipts";
+      "$baseUrl/api/salary-receipts/my-recent-receipts";
 }

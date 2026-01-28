@@ -237,6 +237,7 @@ class SalaryDetailsPage extends StatelessWidget {
                       CustomButton(onTap: () {
                         Get.to(RecentReceiptWidget());
                       }, text: "Recent Salary Details"),
+                        SizedBox(height: 40),
                     ],
                   ),
                 ),
