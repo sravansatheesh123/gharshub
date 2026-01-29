@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gharshub/screen/projects/projects_page.dart';
 import 'package:gharshub/screen/dashboard/dashboard_page.dart';
 import 'package:gharshub/screen/dashboard/widget/dashborad_widget.dart';
 import 'package:gharshub/screen/profile/profile_page.dart';
@@ -15,7 +16,7 @@ class CustomNavigationBarUI extends StatefulWidget {
 class _CustomNavigationBarUIState extends State<CustomNavigationBarUI> {
   int _currentPageIndex = 0;
 
-  final List<Widget> _pages = [DashboardPage(), SalaryDetailsPage(), ProfilePage()];
+  final List<Widget> _pages = [DashboardPage(), ProjectsPage(),SalaryDetailsPage(), ProfilePage()];
 
   @override
   Widget build(BuildContext context) {
@@ -60,6 +61,11 @@ class _CustomNavigationBarUIState extends State<CustomNavigationBarUI> {
               icon: Icon(Icons.home_outlined),
               activeIcon: Icon(Icons.home),
               label: 'Home',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.task),
+              activeIcon: Icon(Icons.task),
+              label: 'Project',
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.payment),

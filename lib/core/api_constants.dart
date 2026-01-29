@@ -46,4 +46,7 @@ class ApiConstants {
       "$baseUrl/api/auth/profile";
 
       static const String currentLeave = "$baseUrl/api/technician/current-leave-status";
+
+        static const String project =
+      "$baseUrl/api/technician/projects";
 }
