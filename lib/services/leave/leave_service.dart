@@ -28,7 +28,7 @@ class LeaveService {
   }
 
 
-  Future<CurrentLeaveModel> currentLeaveStatus({
+   Future<CurrentLeaveModel> currentLeaveStatus({
     required String token,
   }) async {
     final url = Uri.parse(ApiConstants.currentLeave);

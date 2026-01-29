@@ -33,16 +33,14 @@ class ApiConstants {
 
   static const String getRecentReceipt =
       "$baseUrl/api/salary-receipts/my-recent-receipts";
-        static const String submitRecentReceipt =
+  static const String submitRecentReceipt =
       "$baseUrl/api/receipt-requests/request";
+  static const String myRequest = "$baseUrl/api/receipt-requests/my-requests";
+  static const String accessableReceipt =
+      "$baseUrl/api/receipt-requests/accessible-receipts";
 
-  static String downloadRecentReceipt(
-      String employeeId,
-      int month,
-      int year,
-      ) =>
+  static String downloadRecentReceipt(String employeeId, int month, int year) =>
       "$baseUrl/api/salary-receipts/download-url/$employeeId/$month/$year";
-
   static String submitSignature(
       String employeeId,
       int month,
@@ -53,8 +51,11 @@ class ApiConstants {
   static const String profile =
       "$baseUrl/api/auth/profile";
 
-  static const String currentLeave = "$baseUrl/api/technician/current-leave-status";
   static const String recentLeaves =
       "$baseUrl/api/technician/recent-leaves";
 
+      static const String currentLeave = "$baseUrl/api/technician/current-leave-status";
+
+        static const String project =
+      "$baseUrl/api/technician/projects";
 }

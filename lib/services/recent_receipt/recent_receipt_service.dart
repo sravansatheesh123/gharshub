@@ -1,7 +1,9 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:gharshub/core/api_constants.dart';
+import 'package:gharshub/models/accessable_receipt_model.dart';
 import 'package:gharshub/models/my_recent_receipt.dart';
+import 'package:gharshub/models/my_request_model.dart';
 import 'package:gharshub/models/submit_request_model.dart';
 import 'package:http/http.dart' as http;
 import 'package:open_filex/open_filex.dart';
@@ -133,5 +135,59 @@ class RecentReceiptService {
     }
   }
 
+Future<MyRequestModel> myRequest(
+  token,
+  ) async {
+    final url = Uri.parse(ApiConstants.myRequest);
 
+    final response = await http.get(
+      url,
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $token",
+      },
+    );
+
+    final data = jsonDecode(response.body);
+
+    print("Get receipt => ${response.statusCode}");
+    print("Receipt data => $data");
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      return MyRequestModel.fromJson(data);
+    }
+    if (response.statusCode == 404) {
+      return MyRequestModel.fromJson(data);
+    } else {
+      throw Exception("Failed to submit receipt request");
+    }
+  }
+
+  Future<AccessableReceiptModel> accessableReceipt(
+     String token,
+) async {
+    final url = Uri.parse(ApiConstants.accessableReceipt);
+
+    final response = await http.get(
+      url,
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $token",
+      },
+    );
+
+    final data = jsonDecode(response.body);
+
+    print("Get receipt => ${response.statusCode}");
+    print("Receipt data => $data");
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      return AccessableReceiptModel.fromJson(data);
+    }
+    if (response.statusCode == 404) {
+      return AccessableReceiptModel.fromJson(data);
+    } else {
+      throw Exception("Failed to submit receipt request");
+    }
+  }
 }
