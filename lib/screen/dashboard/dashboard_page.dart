@@ -216,7 +216,7 @@ class DashboardPage extends StatelessWidget {
                             child: Column(
                               children: [
                                 reusableRowTile(
-                                  "Recent Leave Days",
+                                  "Total Leave Days",
                                   controller.recentLeaveDays.value.toString(),
                                 ),
                               ],

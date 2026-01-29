@@ -15,6 +15,27 @@ class DashboardController extends GetxController {
   final PunchService _punchService = PunchService();
   final LeaveService _leaveService = LeaveService();
 
+  DateTime? _parseTimeString(String? time) {
+    if (time == null || time.isEmpty) return null;
+
+    try {
+
+      final now = DateTime.now();
+      final parts = time.split(":");
+
+      return DateTime(
+        now.year,
+        now.month,
+        now.day,
+        int.parse(parts[0]),
+        int.parse(parts[1]),
+      );
+    } catch (e) {
+      print("❌ TIME PARSE ERROR => $time");
+      return null;
+    }
+  }
+
   RxString currentTime = "--:--:--".obs;
   Timer? _clockTimer;
   RxInt daysWorked = 0.obs;
@@ -134,12 +155,9 @@ class DashboardController extends GetxController {
       final punch = res.punch!;
 
       // Convert UTC -> Local
-      punchInTime.value =
-      punch.inTime != null ? DateTime.parse(punch.inTime!).toLocal() : null;
+      punchInTime.value = _parseTimeString(punch.inTime);
+      punchOutTime.value = _parseTimeString(punch.outTime);
 
-      punchOutTime.value = punch.outTime != null
-          ? DateTime.parse(punch.outTime!).toLocal()
-          : null;
 
       if (punchInTime.value != null && punchOutTime.value == null) {
         // still punched in
@@ -187,7 +205,7 @@ class DashboardController extends GetxController {
       final res = await _punchService.togglePunch(token: token, action: "in");
 
       if (res.status == "in" && res.punch?.inTime != null) {
-        punchInTime.value = DateTime.parse(res.punch!.inTime!).toLocal();
+        punchInTime.value = _parseTimeString(res.punch!.inTime);
         punchOutTime.value = null;
 
         isPunchedIn.value = true;
@@ -225,9 +243,9 @@ class DashboardController extends GetxController {
       if (res.status == "out") {
         _timer?.cancel();
 
-        punchOutTime.value = res.punch?.outTime != null
-            ? DateTime.parse(res.punch!.outTime!).toLocal()
-            : DateTime.now();
+        punchOutTime.value =
+            _parseTimeString(res.punch?.outTime) ?? DateTime.now();
+
 
         totalWorkedDuration.value = workedDuration.value;
         isPunchedIn.value = false;
@@ -319,26 +337,19 @@ class DashboardController extends GetxController {
       final prefs = await SharedPreferences.getInstance();
       final token = prefs.getString(StorageKeys.token) ?? "";
 
-      print("🔑 RECENT LEAVE TOKEN LENGTH => ${token.length}");
-
       if (token.isEmpty) {
-        print("❌ TOKEN EMPTY");
+        recentLeaveDays.value = 0;
         return;
       }
 
       final res = await _recentLeaveService.getRecentLeaves(token: token);
 
-      print("📦 RECENT LEAVE COUNT => ${res.recentLeaves.length}");
-      print("📦 RECENT LEAVE TOTAL => ${res.total}");
+      print("📦 TOTAL LEAVES => ${res.total}");
+      print("📦 LEAVE LIST LENGTH => ${res.recentLeaves.length}");
 
-      if (res.recentLeaves.isNotEmpty) {
-        print("📦 FIRST LEAVE DAYS => ${res.recentLeaves.first.numberOfDays}");
-        recentLeaveDays.value = res.recentLeaves.first.numberOfDays;
-      } else {
-        recentLeaveDays.value = 0;
-      }
+      recentLeaveDays.value = res.total; // ✅ THIS IS THE FIX
 
-      print("✅ recentLeaveDays SET TO => ${recentLeaveDays.value}");
+      print("✅ UI TOTAL LEAVES SET TO => ${recentLeaveDays.value}");
     } catch (e) {
       print("❌ FETCH RECENT LEAVE ERROR => $e");
       recentLeaveDays.value = 0;
@@ -346,6 +357,8 @@ class DashboardController extends GetxController {
       isLeaveLoading.value = false;
     }
   }
+
+
 
   void openNotificationPopup() {
     if (latestLeave.value == null) {

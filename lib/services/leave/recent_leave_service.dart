@@ -7,9 +7,10 @@ class RecentLeaveService {
   Future<RecentLeaveResponse> getRecentLeaves({
     required String token,
   }) async {
-    final url = Uri.parse(ApiConstants.latestLeave);
+    final url = Uri.parse(ApiConstants.recentLeaves);
 
     print("📌 RECENT LEAVE API URL => $url");
+    print("🔑 TOKEN => ${token.substring(0, 10)}...");
 
     final response = await http.get(
       url,
@@ -19,16 +20,17 @@ class RecentLeaveService {
       },
     );
 
-    print("📥 RECENT LEAVE STATUS => ${response.statusCode}");
-    print("📥 RECENT LEAVE BODY => ${response.body}");
+    print("📥 STATUS CODE => ${response.statusCode}");
+    print("📥 RAW RESPONSE => ${response.body}");
 
     final data = jsonDecode(response.body);
 
     if (response.statusCode == 200) {
+      print("✅ PARSED JSON => $data");
       return RecentLeaveResponse.fromJson(data);
     }
 
     throw Exception(data["message"] ?? "Failed to fetch recent leaves");
   }
-
 }
+
