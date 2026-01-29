@@ -22,7 +22,6 @@ class _CustomNavigationBarUIState extends State<CustomNavigationBarUI> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: _pages[_currentPageIndex],
-
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
           boxShadow: [
