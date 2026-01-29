@@ -12,6 +12,7 @@ import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:month_picker_dialog/month_picker_dialog.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class RecentReceiptController extends GetxController {
   RecentReceiptModel? receiptModel;
@@ -22,13 +23,25 @@ class RecentReceiptController extends GetxController {
   TextEditingController reasonReceiptCtlr = TextEditingController();
   setLoader(status) {
     isLoading = status;
-    update();
+    update(["loader"]);
   }
+
+
 
   bool isEnableRequest = false;
   setReceiptRequest(status) {
     isEnableRequest = status;
     update();
+  }
+
+  Future<void> loadAllData() async {
+    setLoader(true);
+
+    await getRecentReceipt();
+    await myRequest();
+    await accessableRequest();
+
+    setLoader(false);
   }
 
   Future<String> _getToken() async {
@@ -37,15 +50,15 @@ class RecentReceiptController extends GetxController {
   }
 
   Future<void> getRecentReceipt() async {
-    setLoader(true);
+    // setLoader(true);
     try {
       final token = await _getToken();
       final res = await RecentReceiptService().getrecentReceipt(token: token);
       receiptModel = res;
-      setLoader(false);
+      // setLoader(false);
       print(res);
     } catch (e) {
-      setLoader(false);
+      // setLoader(false);
       Get.snackbar(
         "Punch Status",
         e.toString().replaceAll("Exception:", "").trim(),
@@ -77,6 +90,19 @@ class RecentReceiptController extends GetxController {
       );
     }
   }
+  Future<void> openReceiptUrl(String? url) async {
+    if (url == null || url.isEmpty) {
+      Get.snackbar("Error", "No file found");
+      return;
+    }
+
+    final Uri uri = Uri.parse(url);
+
+    if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
+      Get.snackbar("Error", "Could not open file");
+    }
+  }
+
   Future<void> downloadReceipt({
     required int month,
     required int year,
@@ -113,15 +139,15 @@ finally {
 
 
   Future<void> myRequest() async {
-    setLoader(true);
+    // setLoader(true);
     try {
       final token = await _getToken();
       final res = await RecentReceiptService().myRequest(token);
       myRequestModel = res;
-      setLoader(false);
+      // setLoader(false);
       setReceiptRequest(false);
     } catch (e) {
-      setLoader(false);
+      // setLoader(false);
       Get.snackbar(
         "Punch Status",
         e.toString().replaceAll("Exception:", "").trim(),
@@ -131,15 +157,15 @@ finally {
 
 
     Future<void> accessableRequest() async {
-    setLoader(true);
+    // setLoader(true);
     try {
       final token = await _getToken();
       final res = await RecentReceiptService().accessableReceipt(token);
       accessableReceiptModel = res;
-      setLoader(false);
+      // setLoader(false);
       setReceiptRequest(false);
     } catch (e) {
-      setLoader(false);
+      // setLoader(false);
       Get.snackbar(
         "Punch Status",
         e.toString().replaceAll("Exception:", "").trim(),
@@ -147,11 +173,11 @@ finally {
     }
   }
 
-  @override
-  void onInit() {
-    getRecentReceipt();
-    super.onInit();
-  }
+  // @override
+  // void onInit() {
+  //   getRecentReceipt();
+  //   super.onInit();
+  // }
 
   String? selectedMonth;
   int selectedYear = DateTime.now().year;

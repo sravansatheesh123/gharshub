@@ -253,7 +253,8 @@ final leaveCtlr = Get.put(LeavesController());
 
                       SizedBox(height: 10),
                       CustomButton(onTap: () {
-                        Get.to(RecentReceiptWidget());
+                        Get.to(() => RecentReceiptWidget());
+
                       }, text: "Recent Salary Details"),
                         SizedBox(height: 40),
                     ],
