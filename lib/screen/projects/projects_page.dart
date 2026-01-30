@@ -14,7 +14,7 @@ class ProjectsPage extends StatelessWidget {
     return GetBuilder<ProjectController>(
       init: ProjectController(),
       builder: (controller) => Scaffold(
-        backgroundColor: AppColors.skyColor,
+        backgroundColor: AppColors.whiteColor,
         appBar: AppBar(
           centerTitle: true,
           leading: Padding(
@@ -33,7 +33,7 @@ class ProjectsPage extends StatelessWidget {
 
 
 
-        body: controller.isLoading? CircularProgressIndicator(): Padding(
+        body: controller.isLoading? Center(child: CircularProgressIndicator()): Padding(
           padding: const EdgeInsets.all(8.0),
           child: controller.projectListModel?.data?.length == 0
               ? Container()
@@ -127,10 +127,10 @@ class ProjectsPage extends StatelessWidget {
                                     "Overall Performance",
                                     color: AppColors.buttonColor,
                                   ),
-                                  AppText(
-                                    "Assigned : 18 Peples",
-                                    color: AppColors.buttonColor,
-                                  ),
+                                  // AppText(
+                                  //   "Assigned : 18 Peples",
+                                  //   color: AppColors.buttonColor,
+                                  // ),
                                 ],
                               ),
                               SizedBox(height: 10),
@@ -139,66 +139,67 @@ class ProjectsPage extends StatelessWidget {
                                 color: AppColors.buttonColor,
                               ),
                               SizedBox(height: 10),
-                              Row(
-                                children: [
-                                  _reusableContainer(
-                                    icon: Icons.check_circle,
-                                    textColor: AppColors.greenColor,
-                                    boxColor: AppColors.lightGreenColor,
-                                    status: "Completed",
-                                    count: "10",
-                                  ),
-                                  SizedBox(width: 3),
-                                  _reusableContainer(
-                                    icon: Icons.error_rounded,
-                                    textColor: AppColors.redColor,
-                                    boxColor: AppColors.lightRedColor,
-                                    status: "Overdue",
-                                    count: "10",
-                                  ),
-                                  SizedBox(width: 3),
-                                  _reusableContainer(
-                                    icon: Icons.timer,
-                                    textColor: Colors.orange,
-                                    boxColor: AppColors.lightAmberColor,
-                                    status: "Pending",
-                                    count: "10",
-                                  ),
-                                ],
-                              ),
-                              SizedBox(height: 10),
-                              Row(
-                                children: [
-                                  CustomButton(
-                                    width: 100,
-                                    onTap: () {
-                                      Get.to(ViewTaskPage());
-                                    },
-                                    text: "View Task",
-                                    textSize: 12,
-                                  ),
-                                  Spacer(),
-                                  Container(
-                                    width: 100,
-                                    padding: EdgeInsets.symmetric(
-                                      horizontal: 10,
-                                      vertical: 10,
-                                    ),
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10),
-                                      border: Border.all(
-                                        color: AppColors.buttonColor,
-                                      ),
-                                    ),
-                                    child: Center(
-                                      child: AppText(
-                                        "View Team",
-                                        color: AppColors.buttonColor,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
+                              // Row(
+                              //   children: [
+                              //     _reusableContainer(
+                              //       icon: Icons.check_circle,
+                              //       textColor: AppColors.greenColor,
+                              //       boxColor: AppColors.lightGreenColor,
+                              //       status: "Completed",
+                              //       count: "10",
+                              //     ),
+                              //     SizedBox(width: 3),
+                              //     _reusableContainer(
+                              //       icon: Icons.error_rounded,
+                              //       textColor: AppColors.redColor,
+                              //       boxColor: AppColors.lightRedColor,
+                              //       status: "Overdue",
+                              //       count: "10",
+                              //     ),
+                              //     SizedBox(width: 3),
+                              //     _reusableContainer(
+                              //       icon: Icons.timer,
+                              //       textColor: Colors.orange,
+                              //       boxColor: AppColors.lightAmberColor,
+                              //       status: "Pending",
+                              //       count: "10",
+                              //     ),
+                              //   ],
+                              // ),
+                              // SizedBox(height: 10),
+                              // Row(
+                              //   children: [
+                              //     CustomButton(
+                              //       width: 100,
+                              //       onTap: () {
+                              //         Get.to(ViewTaskPage());
+                              //       },
+                              //       text: "View Task",
+                              //       textSize: 12,
+                              //     ),
+                              //     Spacer(),
+                              //     Container(
+                              //       width: 100,
+                              //       padding: EdgeInsets.symmetric(
+                              //         horizontal: 10,
+                              //         vertical: 10,
+                              //       ),
+                              //       decoration: BoxDecoration(
+                              //         borderRadius: BorderRadius.circular(10),
+                              //         border: Border.all(
+                              //           color: AppColors.buttonColor,
+                              //         ),
+                              //       ),
+                              //       child: Center(
+                              //         child: AppText(
+                              //           "View Team",
+                              //           color: AppColors.buttonColor,
+                              //         ),
+                              //       ),
+                              //     ),
+                              //   ],
+                              // ),
+                            
                             ],
                           ),
                         ),

@@ -7,6 +7,8 @@ import 'package:gharshub/screen/dashboard/widget/apply_leave_widget.dart';
 import 'package:gharshub/screen/dashboard/widget/attendance_widget.dart';
 import 'package:gharshub/screen/dashboard/widget/dashboard_appbar.dart';
 import 'package:gharshub/screen/dashboard/widget/dashborad_widget.dart';
+import 'package:gharshub/screen/notification/notification_page.dart';
+import 'package:gharshub/screen/projects/projects_page.dart';
 import 'package:gharshub/screen/salary_details/salary_details_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -148,9 +150,7 @@ class DashboardPage extends StatelessWidget {
                   ),
 
                   DashBoardWidget(
-                    title: "My Task",
-                    subTitle: "Assigned Tasks  : ",
-                    subTitleValue: "3",
+                    title: "My Project",
                     isEnable: true,
                     widget: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -166,7 +166,9 @@ class DashboardPage extends StatelessWidget {
                         ),
                         Padding(
                           padding: const EdgeInsets.all(8.0),
-                          child: CustomButton(onTap: () {}, text: "View Task"),
+                          child: CustomButton(onTap: () {
+                              Get.to(ProjectsPage());
+                          }, text: "View Task"),
                         ),
                       ],
                     ),
@@ -189,7 +191,9 @@ class DashboardPage extends StatelessWidget {
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: CustomButton(
-                            onTap: () {},
+                            onTap: () {
+                              Get.to(NotificationPage());
+                            },
                             text: "View Notification",
                           ),
                         ),
