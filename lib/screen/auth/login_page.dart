@@ -46,135 +46,129 @@ class LoginPage extends StatelessWidget {
                       style: TextStyle(fontSize: 13, color: Colors.black54),
                     ),
                     SizedBox(height: h * 0.04),
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        "Email or Mobile",
-                        style: TextStyle(
-                          fontSize: 13,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.grey.shade800,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    TextField(
-                      controller: controller.emailController,
-                      decoration: InputDecoration(
-                        filled: true,
-                        fillColor: AppColors.whiteColor,
-                        contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 14,
-                          vertical: 14,
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide: BorderSide(color: Colors.grey.shade300),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide: const BorderSide(
-                            color: Color(0xFF0A3D91),
-                            width: 1.3,
+                  AutofillGroup(
+                    child: Column(
+                      children: [
+
+                        // EMAIL
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            "Email or Mobile",
+                            style: TextStyle(
+                              fontSize: 13,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.grey.shade800,
+                            ),
                           ),
                         ),
-                      ),
-                    ),
-                    const SizedBox(height: 6),
-                    Obx(
-                      () => controller.emailError.value.isEmpty
-                          ? const SizedBox()
-                          : Align(
-                              alignment: Alignment.centerLeft,
-                              child: Text(
-                                controller.emailError.value,
-                                style: const TextStyle(
-                                  fontSize: 12,
-                                  color: Colors.red,
+                        const SizedBox(height: 8),
+                        TextField(
+                          controller: controller.emailController,
+                          autofillHints: const [
+                            AutofillHints.username,
+                            AutofillHints.email,
+                          ], // <-- ADDED
+                          decoration: InputDecoration(
+                            filled: true,
+                            fillColor: AppColors.whiteColor,
+                            contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 14,
+                              vertical: 14,
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                              borderSide: BorderSide(color: Colors.grey.shade300),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                              borderSide: const BorderSide(
+                                color: Color(0xFF0A3D91),
+                                width: 1.3,
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 6),
+                        Obx(
+                              () => controller.emailError.value.isEmpty
+                              ? const SizedBox()
+                              : Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              controller.emailError.value,
+                              style: const TextStyle(
+                                fontSize: 12,
+                                color: Colors.red,
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+
+                        // PASSWORD
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            "Password",
+                            style: TextStyle(
+                              fontSize: 13,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.grey.shade800,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Obx(
+                              () => TextField(
+                            controller: controller.passwordController,
+                            obscureText: !controller.isPasswordVisible.value,
+                            autofillHints: const [
+                              AutofillHints.password
+                            ], // <-- ADDED
+                            decoration: InputDecoration(
+                              filled: true,
+                              fillColor: AppColors.whiteColor,
+                              contentPadding: const EdgeInsets.symmetric(
+                                horizontal: 14,
+                                vertical: 14,
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                                borderSide: BorderSide(color: Colors.grey.shade300),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                                borderSide: const BorderSide(
+                                  color: Color(0xFF0A3D91),
+                                  width: 1.3,
                                 ),
                               ),
-                            ),
-                    ),
-                    const SizedBox(height: 16),
-
-                    // Password
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        "Password",
-                        style: TextStyle(
-                          fontSize: 13,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.grey.shade800,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    Obx(
-                      () => TextField(
-                        controller: controller.passwordController,
-                        obscureText: !controller.isPasswordVisible.value,
-                        decoration: InputDecoration(
-                          filled: true,
-                          fillColor: AppColors.whiteColor,
-                          contentPadding: const EdgeInsets.symmetric(
-                            horizontal: 14,
-                            vertical: 14,
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            borderSide: BorderSide(color: Colors.grey.shade300),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            borderSide: const BorderSide(
-                              color: Color(0xFF0A3D91),
-                              width: 1.3,
-                            ),
-                          ),
-                          suffixIcon: InkWell(
-                            onTap: controller.togglePassword,
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 14,
-                              ),
-                              child: Center(
-                                widthFactor: 1,
-                                child: Text(
-                                  controller.isPasswordVisible.value
-                                      ? "Hide"
-                                      : "Show",
-                                  style: const TextStyle(
-                                    color: Color(0xFF0A3D91),
-                                    fontWeight: FontWeight.w600,
+                              suffixIcon: InkWell(
+                                onTap: controller.togglePassword,
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 14),
+                                  child: Center(
+                                    widthFactor: 1,
+                                    child: Text(
+                                      controller.isPasswordVisible.value ? "Hide" : "Show",
+                                      style: const TextStyle(
+                                        color: Color(0xFF0A3D91),
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
                                   ),
                                 ),
                               ),
+                              suffixIconConstraints:
+                              const BoxConstraints(minWidth: 70),
                             ),
-                          ),
-                          suffixIconConstraints: const BoxConstraints(
-                            minWidth: 70,
                           ),
                         ),
-                      ),
+                      ],
                     ),
-                    const SizedBox(height: 6),
-                    Obx(
-                      () => controller.passwordError.value.isEmpty
-                          ? const SizedBox()
-                          : Align(
-                              alignment: Alignment.centerLeft,
-                              child: Text(
-                                controller.passwordError.value,
-                                style: const TextStyle(
-                                  fontSize: 12,
-                                  color: Colors.red,
-                                ),
-                              ),
-                            ),
-                    ),
-
-                    const SizedBox(height: 14),
+                  ),
+                  const SizedBox(height: 14),
                     Row(
                       children: [
                         Obx(
@@ -237,65 +231,64 @@ class LoginPage extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 18),
-                    Row(
-                      children: [
-                        Expanded(child: Divider(color: Colors.grey.shade300)),
-                        const Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 10),
-                          child: Text(
-                            "or",
-                            style: TextStyle(color: Colors.black54),
-                          ),
-                        ),
-                        Expanded(child: Divider(color: Colors.grey.shade300)),
-                      ],
-                    ),
+                    // Row(
+                    //   children: [
+                    //     Expanded(child: Divider(color: Colors.grey.shade300)),
+                    //     const Padding(
+                    //       padding: EdgeInsets.symmetric(horizontal: 10),
+                    //       child: Text(
+                    //         "or",
+                    //         style: TextStyle(color: Colors.black54),
+                    //       ),
+                    //     ),
+                    //     Expanded(child: Divider(color: Colors.grey.shade300)),
+                    //   ],
+                    // ),
+                    //
+                    // const SizedBox(height: 18),
 
-                    const SizedBox(height: 18),
-
-                    SizedBox(
-                      width: double.infinity,
-                      height: 46,
-                      child: OutlinedButton(
-                        onPressed: controller.signInAsSupervisor,
-                        style: OutlinedButton.styleFrom(
-                          side: const BorderSide(color: Color(0xFF0A3D91)),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                        ),
-                        child: const Text(
-                          "Sign in as site supervisor",
-                          style: TextStyle(
-                            color: Color(0xFF0A3D91),
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 12),
-                    SizedBox(
-                      width: double.infinity,
-                      height: 46,
-                      child: OutlinedButton(
-                        onPressed: controller.signInAsTechnician,
-                        style: OutlinedButton.styleFrom(
-                          side: const BorderSide(color: Color(0xFF0A3D91)),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                        ),
-                        child: const Text(
-                          "Sign in as technician",
-                          style: TextStyle(
-                            color: Color(0xFF0A3D91),
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ),
-                    ),
-
-                    const SizedBox(height: 20),
+                    // SizedBox(
+                    //   width: double.infinity,
+                    //   height: 46,
+                    //   child: OutlinedButton(
+                    //     onPressed: controller.signInAsSupervisor,
+                    //     style: OutlinedButton.styleFrom(
+                    //       side: const BorderSide(color: Color(0xFF0A3D91)),
+                    //       shape: RoundedRectangleBorder(
+                    //         borderRadius: BorderRadius.circular(10),
+                    //       ),
+                    //     ),
+                    //     child: const Text(
+                    //       "Sign in as site supervisor",
+                    //       style: TextStyle(
+                    //         color: Color(0xFF0A3D91),
+                    //         fontWeight: FontWeight.w600,
+                    //       ),
+                    //     ),
+                    //   ),
+                    // ),
+                    // const SizedBox(height: 12),
+                    // SizedBox(
+                    //   width: double.infinity,
+                    //   height: 46,
+                    //   child: OutlinedButton(
+                    //     onPressed: controller.signInAsTechnician,
+                    //     style: OutlinedButton.styleFrom(
+                    //       side: const BorderSide(color: Color(0xFF0A3D91)),
+                    //       shape: RoundedRectangleBorder(
+                    //         borderRadius: BorderRadius.circular(10),
+                    //       ),
+                    //     ),
+                    //     child: const Text(
+                    //       "Sign in as technician",
+                    //       style: TextStyle(
+                    //         color: Color(0xFF0A3D91),
+                    //         fontWeight: FontWeight.w600,
+                    //       ),
+                    //     ),
+                    //   ),
+                    // ),
+                    const SizedBox(height: 10),
                     const Text(
                       "By continuing, you agree to Terms & Privacy.",
                       style: TextStyle(fontSize: 11, color: Colors.black54),

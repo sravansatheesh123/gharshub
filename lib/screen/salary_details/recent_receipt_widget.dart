@@ -214,15 +214,11 @@ class _RecentReceiptWidgetState extends State<RecentReceiptWidget> {
               ),
             ),
           ),
-          recentReceiptController
-              .myRequestModel
-              ?.data
-              ?.requests
-              ?.length ==
-              0
+          (recentReceiptController.myRequestModel?.data?.requests?.isEmpty ?? true)
               ? Container()
               : Padding(
-            padding: const EdgeInsets.all(8.0),
+
+          padding: const EdgeInsets.all(8.0),
             child: Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
@@ -233,27 +229,39 @@ class _RecentReceiptWidgetState extends State<RecentReceiptWidget> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  AppText(
-                    "Your Request (${recentReceiptController.myRequestModel?.data?.requests?.length})",
+                  GetBuilder<RecentReceiptController>(
+                    builder: (c) {
+                      return AppText(
+                        "Your Request (${c.myRequestModel?.data?.requests?.length ?? 0})",
+                      );
+                    },
                   ),
-                  Row(
-                    children: [
-                      AppText(
-                        formatAppDate(
-                          recentReceiptController
-                              .myRequestModel
-                              ?.data
-                              ?.requests?[0]
-                              .approvedAt,
-                        ),
-                        fontheight: 2,
-                      ),
-                      SizedBox(width: 10),
-                      AppText(
-                        "${recentReceiptController.myRequestModel?.data?.requests?[0].timeRemaining?.hours}hr ${recentReceiptController.myRequestModel?.data?.requests?[0].timeRemaining?.minutes} mn remaining",
-                      ),
-                    ],
+
+
+                  GetBuilder<RecentReceiptController>(
+                    builder: (c) {
+                      final req = c.myRequestModel?.data?.requests;
+                      if (req == null || req.isEmpty) return SizedBox();
+
+                      return Row(
+                        children: [
+                          AppText(
+                            formatAppDate(req[0].approvedAt),
+                            fontheight: 2,
+                          ),
+                          SizedBox(width: 10),
+                          AppText(
+                            req[0].timeRemaining == null
+                                ? "Expired"
+                                : "${req[0].timeRemaining!.hours} hr "
+                                "${req[0].timeRemaining!.minutes} min remaining",
+                          ),
+
+                        ],
+                      );
+                    },
                   ),
+
                 ],
               ),
             ),

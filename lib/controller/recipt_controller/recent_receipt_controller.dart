@@ -55,6 +55,7 @@ class RecentReceiptController extends GetxController {
       final token = await _getToken();
       final res = await RecentReceiptService().getrecentReceipt(token: token);
       receiptModel = res;
+      update();
       // setLoader(false);
       print(res);
     } catch (e) {
@@ -139,29 +140,30 @@ finally {
 
 
   Future<void> myRequest() async {
-    // setLoader(true);
     try {
       final token = await _getToken();
       final res = await RecentReceiptService().myRequest(token);
+
+      print("🔥 MY REQUEST RAW RESPONSE => $res");
+      print("🔥 REQUEST LIST => ${res.data?.requests}");
+      print("🔥 REQUEST LENGTH => ${res.data?.requests?.length}");
+
       myRequestModel = res;
-      // setLoader(false);
-      setReceiptRequest(false);
+      update(); // important
     } catch (e) {
-      // setLoader(false);
-      Get.snackbar(
-        "Punch Status",
-        e.toString().replaceAll("Exception:", "").trim(),
-      );
+      print("❌ ERROR => $e");
     }
   }
 
 
-    Future<void> accessableRequest() async {
+
+  Future<void> accessableRequest() async {
     // setLoader(true);
     try {
       final token = await _getToken();
       final res = await RecentReceiptService().accessableReceipt(token);
       accessableReceiptModel = res;
+      update();
       // setLoader(false);
       setReceiptRequest(false);
     } catch (e) {

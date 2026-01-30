@@ -31,6 +31,9 @@ class ApiConstants {
   static const String editPunch =
       "$baseUrl/api/site-supervisor/attendance/edit-punch";
 
+
+  ///tech////
+
   static const String getRecentReceipt =
       "$baseUrl/api/salary-receipts/my-recent-receipts";
   static const String submitRecentReceipt =

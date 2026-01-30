@@ -16,6 +16,7 @@ import '../../controller/dashboard/dashboard_controller.dart';
 import '../../core/storage_keys.dart';
 import '../auth/login_page.dart';
 import '../profile/profile_page.dart';
+import 'notification/notification_screen.dart';
 
 class DashboardPage extends StatelessWidget {
    DashboardPage({super.key});
@@ -44,10 +45,11 @@ class DashboardPage extends StatelessWidget {
         child: Obx(
               () => DashboardAppBar(
             notificationCount: dashboardController.notificationCount.value,
-            onTapNotification: () {
-              dashboardController.openNotificationPopup();
-            },
-            onTapLogout: () async {
+                onTapNotification: () {
+                  Get.to(() => const NotificationScreen());
+                },
+
+                onTapLogout: () async {
               final prefs = await SharedPreferences.getInstance();
               await prefs.clear();
 

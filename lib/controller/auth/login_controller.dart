@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:gharshub/screen/dashboard/bottom_nav_bar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter/services.dart';
 
 import '../../core/storage_keys.dart';
 import '../../services/auth/auth_service.dart';
@@ -76,7 +77,7 @@ class LoginController extends GetxController {
       print("✅ USERNAME => ${res.user.username}");
 
       Get.snackbar("Success", "Login successful");
-
+      TextInput.finishAutofillContext();
       final role = res.user.role.toLowerCase().trim();
 
       // ✅ Navigate based on role
@@ -91,7 +92,7 @@ class LoginController extends GetxController {
         }
         // Get.offAll(() => DashboardPage());
         Get.offAll(() => CustomNavigationBarUI());
-        
+
       }
     } catch (e) {
       Get.snackbar(

@@ -26,7 +26,11 @@ class Data {
     Data({this.requests});
 
     Data.fromJson(Map<String, dynamic> json) {
-        requests = json["requests"] == null ? null : (json["requests"] as List).map((e) => Requests.fromJson(e)).toList();
+        requests = (json["requests"] as List?)
+            ?.map((e) => Requests.fromJson(e))
+            .toList() ??
+            [];
+
     }
 
     Map<String, dynamic> toJson() {
