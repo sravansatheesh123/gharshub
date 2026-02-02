@@ -5,6 +5,7 @@ import 'package:gharshub/custom_widgets/app_bar.dart';
 import 'package:gharshub/custom_widgets/app_button.dart';
 import 'package:gharshub/custom_widgets/app_text.dart';
 import 'package:gharshub/screen/Supervisor/make_attendance/make_attendance_page.dart';
+import 'package:gharshub/screen/Supervisor/project/project.dart';
 import 'package:gharshub/screen/projects/projects_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -169,7 +170,7 @@ class SupervisorDashboard extends StatelessWidget {
                     ),
                     const SizedBox(height: 7),
                     CustomButton(
-                      onTap: () => Get.to(() => ProjectsPage()),
+                      onTap: () => Get.to(() => SPV_ProjectsPage()),
                       text: "View Projects",
                     ),
                   ],
@@ -299,4 +300,3 @@ class SupervisorDashboard extends StatelessWidget {
     );
   }
 }
-

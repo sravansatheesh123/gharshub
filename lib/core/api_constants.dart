@@ -31,7 +31,6 @@ class ApiConstants {
   static const String editPunch =
       "$baseUrl/api/site-supervisor/attendance/edit-punch";
 
-
   ///tech////
 
   static const String getRecentReceipt =
@@ -44,21 +43,28 @@ class ApiConstants {
 
   static String downloadRecentReceipt(String employeeId, int month, int year) =>
       "$baseUrl/api/salary-receipts/download-url/$employeeId/$month/$year";
-  static String submitSignature(
-      String employeeId,
-      int month,
-      int year,
-      ) =>
+  static String submitSignature(String employeeId, int month, int year) =>
       "$baseUrl/api/salary-receipts/signature/$employeeId/$month/$year";
 
-  static const String profile =
-      "$baseUrl/api/auth/profile";
+  static const String profile = "$baseUrl/api/auth/profile";
 
-  static const String recentLeaves =
-      "$baseUrl/api/technician/recent-leaves";
+  static const String recentLeaves = "$baseUrl/api/technician/recent-leaves";
 
-      static const String currentLeave = "$baseUrl/api/technician/current-leave-status";
+  static const String currentLeave =
+      "$baseUrl/api/technician/current-leave-status";
 
-        static const String project =
-      "$baseUrl/api/technician/projects";
+  static const String project = "$baseUrl/api/technician/projects";
+
+  // ------------  Supervisor Api -------------
+
+  static const String spv_dashborad = "$baseUrl/site-supervisor/dashboard";
+  static const String spv_profile = "$baseUrl/api/auth/profile";
+  static const String spv_project = "$baseUrl/api/site-supervisor/project";
+  viewTask({projectId}) {
+    return "$baseUrl/api/site-supervisor/tasks?projectId=$projectId&type=project&page=1&limit=20";
+  }
+
+  viewSubTask({projectId}) {
+    return "$baseUrl/api/site-supervisor/tasks/$projectId";
+  }
 }
