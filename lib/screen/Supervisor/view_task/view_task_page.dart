@@ -48,126 +48,133 @@ class _ViewTaskPageState extends State<ViewTaskPage> {
                 return Center(child: AppText("Loading..."));
               }
 
+              final tasks = controller.viewTaskModel?.data?.tasks ?? [];
+
+              if (tasks.isEmpty) {
+                return Center(child: AppText("No Tasks Found"));
+              }
+
               return ListView.builder(
-                itemCount: controller.viewTaskModel?.data?.tasks?.length ?? 0,
-                itemBuilder: (context, index) =>
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: AppColors.whiteColor,
+                itemCount: tasks.length,
+                itemBuilder: (context, index) => Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: AppColors.whiteColor,
+                    ),
+                  child: Column(
+                    children: [
+                      ListTile(
+                        title: AppText(
+                          spv_ViewTaskController
+                                  .viewTaskModel
+                                  ?.data
+                                  ?.tasks?[index]
+                                  .displayInfo ??
+                              "",
                         ),
-
-                        child: Column(
-                          children: [
-                            ListTile(
-                              title: AppText(
-                                spv_ViewTaskController
-                                    .viewTaskModel
-                                    ?.data
-                                    ?.tasks?[index]
-                                    .displayInfo ??
-                                    "",
-                              ),
-                              subtitle: AppText("Due: 18 Aug"),
-                              trailing: SizedBox(
-                                width: 130,
-                                child: Row(
-                                  children: [
-                                    Container(
-                                      height: 40,
-                                      width: 100,
-                                      decoration: BoxDecoration(
-                                        color: Colors.orange.shade500,
-                                        borderRadius: BorderRadius.circular(10),
-                                      ),
-                                      padding: EdgeInsets.symmetric(
-                                        horizontal: 5,
-                                        vertical: 1,
-                                      ),
-                                      child: Center(
-                                        child: AppText(
-                                          spv_ViewTaskController
-                                              .viewTaskModel
-                                              ?.data
-                                              ?.tasks?[index]
-                                              .statusLabel ??
-                                              "",
-                                          fontSize: 10,
-                                          color: AppColors.whiteColor,
-                                        ),
-                                      ),
-                                    ),
-                                    SizedBox(width: 6),
-                                    Icon(Icons.edit),
-                                  ],
+                        subtitle: AppText("Due: 18 Aug"),
+                        trailing: SizedBox(
+                          width: 130,
+                          child: Row(
+                            children: [
+                              Container(
+                                height: 40,
+                                width: 100,
+                                decoration: BoxDecoration(
+                                  color: Colors.orange.shade500,
+                                  borderRadius: BorderRadius.circular(10),
                                 ),
-                              ),
-                            ),
-                            ListTile(
-                              leading: AppText("Start Date"),
-                              trailing: AppText(
-                                formatAppDate(
-                                  spv_ViewTaskController
-                                      .viewTaskModel
-                                      ?.data
-                                      ?.tasks?[index]
-                                      .startDate ??
-                                      "",
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: 5,
+                                  vertical: 1,
                                 ),
-                              ),
-                            ),
-                            ListTile(
-                              minTileHeight: 20,
-                              leading: AppText("End Date"),
-                              trailing: AppText(
-                                formatAppDate(
-                                  spv_ViewTaskController
-                                      .viewTaskModel
-                                      ?.data
-                                      ?.tasks?[index]
-                                      .endDate ??
-                                      "",
-                                ),
-                              ),
-                            ),
-                            ListTile(
-                              leading: AppText("SubTask"),
-                              trailing: AppText(
-                                spv_ViewTaskController
-                                    .viewTaskModel
-                                    ?.data
-                                    ?.tasks?[index]
-                                    .subTasksCount
-                                    .toString() ??
-                                    "",
-                              ),
-                            ),
-                            CustomButton(
-                              onTap: () {
-                                Get.to(
-                                  SubTaskPage(
-                                    projectId: spv_ViewTaskController
-                                        .viewTaskModel
-                                        ?.data
-                                        ?.tasks?[index]
-                                        .id
-                                        .toString(),
+                                child: Center(
+                                  child: AppText(
+                                    spv_ViewTaskController
+                                            .viewTaskModel
+                                            ?.data
+                                            ?.tasks?[index]
+                                            .statusLabel ??
+                                        "",
+                                    fontSize: 10,
+                                    color: AppColors.whiteColor,
                                   ),
-                                );
-                              },
-                              text: "SubTask",
-                            ),
-
-                            Divider(),
-                          ],
+                                ),
+                              ),
+                              SizedBox(width: 6),
+                              Icon(Icons.edit),
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-              );
-            }
+                      ListTile(
+                        leading: AppText("Start Date"),
+                        trailing: AppText(
+                          formatAppDate(
+                            spv_ViewTaskController
+                                    .viewTaskModel
+                                    ?.data
+                                    ?.tasks?[index]
+                                    .startDate ??
+                                "",
+                          ),
+                        ),
+                      ),
+                      ListTile(
+                        minTileHeight: 20,
+                        leading: AppText("End Date"),
+                        trailing: AppText(
+                          formatAppDate(
+                            spv_ViewTaskController
+                                    .viewTaskModel
+                                    ?.data
+                                    ?.tasks?[index]
+                                    .endDate ??
+                                "",
+                          ),
+                        ),
+                      ),
+                      ListTile(
+                        leading: AppText("SubTask"),
+                        trailing: AppText(
+                          spv_ViewTaskController
+                                  .viewTaskModel
+                                  ?.data
+                                  ?.tasks?[index]
+                                  .subTasksCount
+                                  .toString() ??
+                              "",
+                        ),
+                      ),
+                      CustomButton(
+                        onTap: () {
+                          Get.to(
+                            SubTaskPage(
+                              projectId: spv_ViewTaskController
+                                  .viewTaskModel
+                                  ?.data
+                                  ?.tasks?[index]
+                                  .id
+                                  .toString(),
+                            ),
+                          );
+                        },
+                        text: "SubTask",
+                      ),
+
+                      Divider(),
+                    ],
+                  ),
+                ),
               ),
+            );
+              }
+              )
+   
+   
+   
     );
   }
 
