@@ -76,17 +76,54 @@ class _SubTaskPageState extends State<SubTaskPage> {
 
                     return Card(
                       child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Column(
                               children: [
                                 ListTile(
-                                  leading: AppText(subTask.title ?? ""),
-                                  title: AppText(
-                                    formatAppDate(
-                                      subTask.sourceStartTimestamp ?? "",
-                                    ),
+                                  title: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      AppText(
+                                        subTask.title ?? "",
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 20,
+                                        color: AppColors.buttonColor,
+                                      ),
+                                      AppText(
+                                        formatAppDate(
+                                          subTask.sourceStartTimestamp ?? "",
+                                        ),
+                                        fontheight: 2,
+                                      ),
+                                 subTask.remarks == "" ? Container():     Row(
+                                        children: [
+                                          AppText("Remarks", fontheight: 2),
+                                          SizedBox(width: 10),
+                                          Container(
+                                            padding: EdgeInsets.symmetric(
+                                              horizontal:2,
+                                              vertical: 7,
+                                            ),
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(5),
+                                              border: Border.all(
+                                                color: AppColors.lightgrayColor,
+                                              ),
+                                            ),
+                                            child: AppText(
+                                              subTask.remarks ?? "",
+                                              fontSize: 9,
+                                              fontheight: 2,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
                                   ),
                                   trailing: Container(
                                     padding: EdgeInsets.symmetric(
@@ -154,6 +191,32 @@ class _SubTaskPageState extends State<SubTaskPage> {
                                         child: Center(
                                           child: AppText(
                                             subTask.actualDurationMinutes
+                                                    .toString() ??
+                                                "",
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    Spacer(),
+                                    AppText("Covered Qty"),
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Container(
+                                        padding: EdgeInsets.symmetric(
+                                          horizontal: 7,
+                                          vertical: 7,
+                                        ),
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(
+                                            5,
+                                          ),
+                                          border: Border.all(
+                                            color: AppColors.lightgrayColor,
+                                          ),
+                                        ),
+                                        child: Center(
+                                          child: AppText(
+                                            subTask.coveredQuantity
                                                     .toString() ??
                                                 "",
                                           ),
