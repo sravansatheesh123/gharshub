@@ -420,16 +420,26 @@ class MakeAttendancePage extends StatelessWidget {
                               ? log.inTime!
                               : "--:--";
 
-                          final displayOut = (log?.displayOutTime != null &&
-                              log!.displayOutTime!.toString().trim().isNotEmpty)
-                              ? log.displayOutTime!
-                              : (log?.pendingEdit?.editedOutTime != null &&
-                              log!.pendingEdit!.editedOutTime!.toString().trim().isNotEmpty)
-                              ? log.pendingEdit!.editedOutTime!
-                              : (log?.outTime != null && log!.outTime!.toString().trim().isNotEmpty)
-                              ? log.outTime!
-                              : "--:--";
+                          final displayOut = () {
+                            if (log == null) return "--:--";
 
+                            final inT = log.inTime?.trim() ?? "";
+                            if (log.displayOutTime != null &&
+                                log.displayOutTime!.trim().isNotEmpty &&
+                                log.displayOutTime!.trim() != inT) {
+                              return log.displayOutTime!;
+                            }
+                            if (log.pendingEdit?.editedOutTime != null &&
+                                log.pendingEdit!.editedOutTime!.trim().isNotEmpty) {
+                              return log.pendingEdit!.editedOutTime!;
+                            }
+                            if (log.outTime != null &&
+                                log.outTime!.trim().isNotEmpty) {
+                              return log.outTime!;
+                            }
+
+                            return "--:--";
+                          }();
 
                           return ListTile(
                             minTileHeight: 30,

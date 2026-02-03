@@ -10,7 +10,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 class ProjectController extends GetxController {
   ProjectListModel? projectListModel;
   bool isLoading = false;
-  setLoader(status) {
+
+  void setLoader(bool status) {
     isLoading = status;
     update();
   }
@@ -20,26 +21,24 @@ class ProjectController extends GetxController {
     return prefs.getString(StorageKeys.token) ?? "";
   }
 
-  Future<void> project() async {
+  Future<void> fetchProjects() async {
     setLoader(true);
     try {
       final token = await _getToken();
-      final res = await ProjectServices().project(token);
-      projectListModel = res;
-      setLoader(false);
-      setLoader(false);
+      projectListModel = await ProjectServices().project(token);
     } catch (e) {
-      setLoader(false);
       Get.snackbar(
-        "Punch Status",
+        "Projects",
         e.toString().replaceAll("Exception:", "").trim(),
       );
+    } finally {
+      setLoader(false);
     }
   }
 
   @override
   void onInit() {
-    project();
     super.onInit();
+    fetchProjects();
   }
 }

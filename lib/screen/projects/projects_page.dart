@@ -33,11 +33,23 @@ class ProjectsPage extends StatelessWidget {
 
 
 
-        body: controller.isLoading? Center(child: CircularProgressIndicator()): Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: controller.projectListModel?.data?.length == 0
-              ? Container()
-              : ListView.builder(
+          body: controller.isLoading
+              ? const Center(child: CircularProgressIndicator())
+              : Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Builder(
+                  builder: (context) {
+                    final projects = controller.projectListModel?.data;
+
+                    if (projects == null) {
+                      return const SizedBox(); // initial state
+                    }
+
+                    if (projects.isEmpty) {
+                      return const Center(child: Text("No projects found"));
+                    }
+
+                    return ListView.builder(
                   itemCount: controller.projectListModel?.data?.length,
                   itemBuilder: (context, index) => Padding(
                     padding: const EdgeInsets.all(8.0),
@@ -199,16 +211,18 @@ class ProjectsPage extends StatelessWidget {
                               //     ),
                               //   ],
                               // ),
-                            
+
                             ],
                           ),
                         ),
                       ],
                     ),
                   ),
-                ),
-        ),
-      ),
+                    );
+                  },
+              ),
+          ),
+      )
     );
   }
 

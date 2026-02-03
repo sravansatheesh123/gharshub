@@ -15,7 +15,7 @@ class SPV_ProjectsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetBuilder<SPV_ProjectController>(
       init: SPV_ProjectController(),
-      id: "SPV_ProjectsPage",
+      // id: "SPV_ProjectsPage",
       builder: (controller) => Scaffold(
         backgroundColor: AppColors.whiteColor,
         appBar: AppBar(
