@@ -26,6 +26,7 @@ class _SubTaskPageState extends State<SubTaskPage> {
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       controller.viewSubTask(widget.projectId);
+      controller.timeStamp(widget.projectId);
     });
   }
 
@@ -99,30 +100,38 @@ class _SubTaskPageState extends State<SubTaskPage> {
                                         ),
                                         fontheight: 2,
                                       ),
-                                 subTask.remarks == "" ? Container():     Row(
-                                        children: [
-                                          AppText("Remarks", fontheight: 2),
-                                          SizedBox(width: 10),
-                                          Container(
-                                            padding: EdgeInsets.symmetric(
-                                              horizontal:2,
-                                              vertical: 7,
+                                      subTask.remarks == ""
+                                          ? Container()
+                                          : Row(
+                                              children: [
+                                                AppText(
+                                                  "Remarks",
+                                                  fontheight: 2,
+                                                ),
+                                                SizedBox(width: 10),
+                                                Container(
+                                                  padding: EdgeInsets.symmetric(
+                                                    horizontal: 2,
+                                                    vertical: 7,
+                                                  ),
+                                                  decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                          5,
+                                                        ),
+                                                    border: Border.all(
+                                                      color: AppColors
+                                                          .lightgrayColor,
+                                                    ),
+                                                  ),
+                                                  child: AppText(
+                                                    subTask.remarks ?? "",
+                                                    fontSize: 9,
+                                                    fontheight: 2,
+                                                  ),
+                                                ),
+                                              ],
                                             ),
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(5),
-                                              border: Border.all(
-                                                color: AppColors.lightgrayColor,
-                                              ),
-                                            ),
-                                            child: AppText(
-                                              subTask.remarks ?? "",
-                                              fontSize: 9,
-                                              fontheight: 2,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
                                     ],
                                   ),
                                   trailing: Container(
@@ -239,12 +248,33 @@ class _SubTaskPageState extends State<SubTaskPage> {
                                           subTask.distancePointA ?? "",
                                           fontSize: 10,
                                         ),
-                                        CustomButton(
-                                          onTap: () {},
-                                          width: 70,
-                                          height: 30,
-                                          textSize: 10,
-                                          text: "Start Work",
+                                        GetBuilder<SPV_ViewTaskController>(
+                                          builder: (controller) => CustomButton(
+                                            onTap:
+                                                controller
+                                                        .spvSubTaskTimestambModel
+                                                        ?.data
+                                                        ?.actualStart ==
+                                                    null
+                                                ? () {
+                                                    controller.startWork(
+                                                      subTask.id.toString(),
+                                                    );
+                                                  }
+                                                : () {},
+                                            width: 70,
+                                            height: 30,
+                                            textSize: 10,
+                                            color:
+                                                controller
+                                                        .spvSubTaskTimestambModel
+                                                        ?.data
+                                                        ?.actualStart ==
+                                                    null
+                                                ? AppColors.lightgrayColor
+                                                : AppColors.buttonColor,
+                                            text: "Start Work",
+                                          ),
                                         ),
                                       ],
                                     ),
@@ -260,12 +290,30 @@ class _SubTaskPageState extends State<SubTaskPage> {
                                           fontSize: 10,
                                         ),
                                         CustomButton(
-                                          onTap: () {},
+                                          onTap:
+                                              controller
+                                                      .spvSubTaskTimestambModel
+                                                      ?.data
+                                                      ?.actualFinish ==
+                                                  null
+                                              ? () {
+                                                  controller.finishWork(
+                                                    subTask.id.toString(),
+                                                  );
+                                                }
+                                              : () {},
                                           width: 70,
                                           height: 30,
                                           textSize: 10,
                                           text: "Finish Work",
-                                          color: AppColors.lightgrayColor,
+                                          color:
+                                              controller
+                                                      .spvSubTaskTimestambModel
+                                                      ?.data
+                                                      ?.actualFinish ==
+                                                  null
+                                              ? AppColors.lightgrayColor
+                                              : AppColors.buttonColor,
                                         ),
                                       ],
                                     ),

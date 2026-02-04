@@ -67,4 +67,16 @@ class ApiConstants {
   viewSubTask({projectId}) {
     return "$baseUrl/api/site-supervisor/tasks/$projectId";
   }
+
+  timestamp({projectId}) {
+    return "$baseUrl/api/timestamp/subinquiry/$projectId/timestamps";
+  }
+
+  startTask({projectId}) {
+    return "$baseUrl/api/timestamp/subinquiry/$projectId/start";
+  }
+
+  finishTaslk({projectId}) {
+    return "$baseUrl/api.gharshub.com/api/timestamp/subinquiry/$projectId/finish";
+  }
 }
