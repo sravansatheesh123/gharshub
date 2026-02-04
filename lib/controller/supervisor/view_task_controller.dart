@@ -61,7 +61,7 @@ class SPV_ViewTaskController extends GetxController {
       setLoader(false);
 
       Get.snackbar(
-        "Punch Status",
+        "Error Message",
         e.toString().replaceAll("Exception:", "").trim(),
       );
     }
@@ -95,7 +95,7 @@ class SPV_ViewTaskController extends GetxController {
       setLoader(false);
 
       Get.snackbar(
-        "Punch Status",
+        "Error Message",
         e.toString().replaceAll("Exception:", "").trim(),
       );
     }

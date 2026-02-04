@@ -29,7 +29,7 @@ class ProfileController extends GetxController {
     } catch (e) {
       setLoader(false);
       Get.snackbar(
-        "Punch Status",
+        "Error Message",
         e.toString().replaceAll("Exception:", "").trim(),
       );
     }
