@@ -80,4 +80,8 @@ class ApiConstants {
 
   static String finishTask(String inquiryId) =>
       "$baseUrl/api/timestamp/inquiry/$inquiryId/finish";
+
+  static String subTaskProgress(String subInquiryId) =>
+      "$baseUrl/api/admin/inquiries/sub-inquiries/$subInquiryId/progress";
+
 }

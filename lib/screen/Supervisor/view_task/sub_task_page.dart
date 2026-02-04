@@ -18,6 +18,66 @@ class SubTaskPage extends StatefulWidget {
 class _SubTaskPageState extends State<SubTaskPage> {
   late SPV_ViewTaskController controller;
 
+  void _showQtyDialog(
+      BuildContext context,
+      String subId,
+      int totalQty,
+      ) {
+
+    TextEditingController qtyController = TextEditingController();
+
+    showDialog(
+      context: context,
+      builder: (_) {
+        return AlertDialog(
+          title: Text("Enter Covered Quantity"),
+
+          content: TextField(
+            controller: qtyController,
+            keyboardType: TextInputType.number,
+            decoration: InputDecoration(
+              hintText: "Max $totalQty",
+            ),
+          ),
+
+          actions: [
+
+            TextButton(
+              onPressed: () => Get.back(),
+              child: Text("Cancel"),
+            ),
+
+            ElevatedButton(
+              onPressed: () {
+
+                int value =
+                    int.tryParse(qtyController.text) ?? 0;
+
+                if (value > totalQty) {
+                  Get.snackbar(
+                    "Error",
+                    "Cannot exceed total quantity",
+                  );
+                  return;
+                }
+
+                controller.updateCoveredQty(
+                  subId,
+                  value,
+                  widget.projectId,
+                );
+
+                Get.back();
+              },
+              child: Text("OK"),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+
   @override
   void initState() {
     super.initState();
@@ -233,6 +293,79 @@ class _SubTaskPageState extends State<SubTaskPage> {
                                     ),
                                   ],
                                 ),
+                                // ============= WEB LIKE PROGRESS UI ==============
+
+                                SizedBox(height: 10),
+
+                                Row(
+                                  children: [
+
+                                    Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        AppText(
+                                          "Total Qty",
+                                          fontWeight: FontWeight.bold,
+                                        ),
+
+                                        AppText(
+                                          "${subTask.totalQuantity ?? 0}",
+                                        ),
+                                      ],
+                                    ),
+
+                                    SizedBox(width: 20),
+
+                                    GestureDetector(
+                                      onTap: subTask.status == "completed"
+                                          ? () {
+                                        Get.snackbar(
+                                          "Not Allowed",
+                                          "Work already completed. Cannot update quantity.",
+                                        );
+                                      }
+                                          : () {
+                                        _showQtyDialog(
+                                          context,
+                                          subTask.id.toString(),
+                                          subTask.totalQuantity ?? 0,
+                                        );
+                                      },
+
+                                      child: Container(
+                                        padding: EdgeInsets.symmetric(
+                                          horizontal: 10,
+                                          vertical: 8,
+                                        ),
+
+                                        decoration: BoxDecoration(
+
+                                          color: subTask.status == "completed"
+                                              ? AppColors.lightgrayColor.withOpacity(.3)
+                                              : Colors.white,
+
+                                          border: Border.all(color: AppColors.lightgrayColor),
+                                          borderRadius: BorderRadius.circular(5),
+                                        ),
+
+                                        child: AppText(
+                                          "${subTask.coveredQuantity ?? 0} / ${subTask.totalQuantity ?? 0}",
+                                        ),
+                                      ),
+                                    ),
+
+
+                                    SizedBox(width: 20),
+
+                                    AppText(
+                                      "Progress : ${subTask.progress ?? 0} %",
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ],
+                                ),
+
+                                SizedBox(height: 10),
+
 
                                 Divider(),
                               ],

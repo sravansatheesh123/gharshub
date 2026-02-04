@@ -19,6 +19,7 @@ class SPV_ViewTaskController extends GetxController {
   SpvViewSubTaskModel? viewSubTaskModel;
 
   bool isLoading = false;
+  dynamic subTaskProgressData;
 
 
   setLoader(status) {
@@ -177,5 +178,63 @@ class SPV_ViewTaskController extends GetxController {
 
     setLoader(false);
   }
+  Future<void> getProgress(String subInquiryId) async {
+    setLoader(true);
+
+    try {
+      final token = await _getToken();
+
+      final res =
+      await SpvViewTaskService().getSubTaskProgress(token, subInquiryId);
+
+      subTaskProgressData = res["data"];
+
+      update();
+
+    } catch (e) {
+      Get.snackbar("Error", e.toString());
+    }
+
+    setLoader(false);
+  }
+  Future<void> updateCoveredQty(
+      String subInquiryId,
+      int qty,
+      projectId,
+      ) async {
+
+    final sub = viewSubTaskModel?.data?.subTasks
+        ?.firstWhere((e) => e.id.toString() == subInquiryId);
+
+    if (sub?.status == "completed") {
+      Get.snackbar(
+        "Not Allowed",
+        "Work already completed",
+      );
+      return;
+    }
+
+    setLoader(true);
+
+    try {
+      final token = await _getToken();
+
+      final res = await SpvViewTaskService()
+          .updateProgress(token, subInquiryId, qty);
+
+      Get.snackbar("Success", res["message"]);
+
+      await viewSubTask(projectId);
+
+    } catch (e) {
+      Get.snackbar(
+        "Error",
+        e.toString().replaceAll("Exception:", ""),
+      );
+    }
+
+    setLoader(false);
+  }
 
 }
+

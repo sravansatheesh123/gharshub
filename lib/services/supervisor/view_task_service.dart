@@ -149,5 +149,64 @@ class SpvViewTaskService {
       throw Exception(data["message"] ?? "Failed to finish task");
     }
   }
+// --------------------------------------------------
+// GET SUB TASK PROGRESS (PATCH)
+// --------------------------------------------------
+  Future<dynamic> getSubTaskProgress(String token, String subInquiryId) async {
+
+    final url = Uri.parse(ApiConstants.subTaskProgress(subInquiryId));
+
+    final res = await http.patch(
+      url,
+      headers: {
+        "Authorization": "Bearer $token",
+        "Content-Type": "application/json"
+      },
+    );
+
+    final data = jsonDecode(res.body);
+
+    if (res.statusCode == 200 && data["success"] == true) {
+      return data;
+    } else {
+      throw Exception(data["message"] ?? "Failed to load progress");
+    }
+  }
+
+  Future<dynamic> updateProgress(
+      String token,
+      String subInquiryId,
+      int coveredQty,
+      ) async {
+
+    final url = Uri.parse(ApiConstants.subTaskProgress(subInquiryId));
+
+    print("🔵 URL : $url");
+    print("🔵 BODY : ${jsonEncode({
+      "covered_quantity": coveredQty
+    })}");
+
+    final res = await http.patch(
+      url,
+      headers: {
+        "Authorization": "Bearer $token",
+        "Content-Type": "application/json"
+      },
+      body: jsonEncode({
+        "covered_quantity": coveredQty
+      }),
+    );
+
+    print("🟠 STATUS : ${res.statusCode}");
+    print("🟠 RESPONSE : ${res.body}");
+
+    final data = jsonDecode(res.body);
+
+    if (res.statusCode == 200 && data["success"] == true) {
+      return data;
+    } else {
+      throw Exception(data["message"] ?? res.body);
+    }
+  }
 
 }
