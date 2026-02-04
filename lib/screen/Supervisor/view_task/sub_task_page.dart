@@ -85,7 +85,7 @@ class _SubTaskPageState extends State<SubTaskPage> {
                                 ListTile(
                                   title: Column(
                                     crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                    CrossAxisAlignment.start,
                                     children: [
                                       AppText(
                                         subTask.title ?? "",
@@ -99,20 +99,26 @@ class _SubTaskPageState extends State<SubTaskPage> {
                                         ),
                                         fontheight: 2,
                                       ),
-                                 subTask.remarks == "" ? Container():     Row(
+
+                                      subTask.remarks == ""
+                                          ? Container()
+                                          : Row(
                                         children: [
-                                          AppText("Remarks", fontheight: 2),
+                                          AppText("Remarks",
+                                              fontheight: 2),
                                           SizedBox(width: 10),
                                           Container(
-                                            padding: EdgeInsets.symmetric(
-                                              horizontal:2,
+                                            padding:
+                                            EdgeInsets.symmetric(
+                                              horizontal: 2,
                                               vertical: 7,
                                             ),
                                             decoration: BoxDecoration(
                                               borderRadius:
-                                                  BorderRadius.circular(5),
+                                              BorderRadius.circular(5),
                                               border: Border.all(
-                                                color: AppColors.lightgrayColor,
+                                                color: AppColors
+                                                    .lightgrayColor,
                                               ),
                                             ),
                                             child: AppText(
@@ -144,133 +150,90 @@ class _SubTaskPageState extends State<SubTaskPage> {
                                     ),
                                   ),
                                 ),
-                                Row(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    AppText("Total Qty"),
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Container(
-                                        padding: EdgeInsets.symmetric(
-                                          horizontal: 7,
-                                          vertical: 7,
-                                        ),
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(
-                                            5,
-                                          ),
-                                          border: Border.all(
-                                            color: AppColors.lightgrayColor,
-                                          ),
-                                        ),
-                                        child: Center(
-                                          child: AppText(
-                                            subTask.totalQuantity.toString() ??
-                                                "",
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    Spacer(),
-                                    AppText("Duration"),
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Container(
-                                        padding: EdgeInsets.symmetric(
-                                          horizontal: 7,
-                                          vertical: 7,
-                                        ),
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(
-                                            5,
-                                          ),
-                                          border: Border.all(
-                                            color: AppColors.lightgrayColor,
-                                          ),
-                                        ),
-                                        child: Center(
-                                          child: AppText(
-                                            subTask.actualDurationMinutes
-                                                    .toString() ??
-                                                "",
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    Spacer(),
-                                    AppText("Covered Qty"),
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Container(
-                                        padding: EdgeInsets.symmetric(
-                                          horizontal: 7,
-                                          vertical: 7,
-                                        ),
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(
-                                            5,
-                                          ),
-                                          border: Border.all(
-                                            color: AppColors.lightgrayColor,
-                                          ),
-                                        ),
-                                        child: Center(
-                                          child: AppText(
-                                            subTask.coveredQuantity
-                                                    .toString() ??
-                                                "",
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
+
                                 SizedBox(height: 10),
+
+                                // ===============================
+                                // YOUR REQUIRED DESIGN SECTION
+                                // ===============================
+
                                 Row(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     AppText("Source - "),
                                     SizedBox(width: 10),
+
                                     Column(
                                       crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                      CrossAxisAlignment.start,
                                       children: [
                                         AppText(
                                           subTask.distancePointA ?? "",
                                           fontSize: 10,
                                         ),
+
                                         CustomButton(
-                                          onTap: () {},
+                                          onTap: subTask.status == "pending"
+                                              ? () {
+                                            controller.startWork(
+                                              subTask.id.toString(),
+                                              widget.projectId,
+                                            );
+                                          }
+                                              : null,
+
                                           width: 70,
                                           height: 30,
                                           textSize: 10,
                                           text: "Start Work",
+
+                                          color: subTask.status == "pending"
+                                              ? AppColors.buttonColor
+                                              : AppColors.lightgrayColor,
                                         ),
                                       ],
                                     ),
+
                                     Spacer(),
+
                                     AppText("Destination - "),
                                     SizedBox(width: 10),
+
                                     Column(
                                       crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                      CrossAxisAlignment.start,
                                       children: [
                                         AppText(
                                           subTask.distancePointB ?? "",
                                           fontSize: 10,
                                         ),
+
                                         CustomButton(
-                                          onTap: () {},
+                                          onTap:
+                                          subTask.status == "in-progress"
+                                              ? () {
+                                            controller.finishWork(
+                                              subTask.id.toString(),
+                                              widget.projectId,
+                                            );
+                                          }
+                                              : null,
+
                                           width: 70,
                                           height: 30,
                                           textSize: 10,
                                           text: "Finish Work",
-                                          color: AppColors.lightgrayColor,
+
+                                          color:
+                                          subTask.status == "in-progress"
+                                              ? AppColors.buttonColor
+                                              : AppColors.lightgrayColor,
                                         ),
                                       ],
                                     ),
                                   ],
                                 ),
+
                                 Divider(),
                               ],
                             ),
@@ -279,7 +242,8 @@ class _SubTaskPageState extends State<SubTaskPage> {
                           ListTile(
                             title: AppText(subTask.title ?? ""),
                             subtitle: AppText(
-                              formatAppDate(subTask.sourceStartTimestamp),
+                              formatAppDate(
+                                  subTask.sourceStartTimestamp),
                             ),
                             trailing: AppText(subTask.status ?? ""),
                           ),
@@ -299,7 +263,8 @@ class _SubTaskPageState extends State<SubTaskPage> {
   String formatAppDate(String? isoDate) {
     if (isoDate == null || isoDate.isEmpty) return "-";
     try {
-      return DateFormat('MMM dd, yyyy').format(DateTime.parse(isoDate));
+      return DateFormat('MMM dd, yyyy')
+          .format(DateTime.parse(isoDate));
     } catch (_) {
       return "-";
     }

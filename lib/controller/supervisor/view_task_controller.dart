@@ -10,6 +10,8 @@ import 'package:gharshub/services/supervisor/profile_service.dart';
 import 'package:gharshub/services/supervisor/view_task_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../services/supervisor/view_task_service.dart';
+
 
 class SPV_ViewTaskController extends GetxController {
 
@@ -97,4 +99,83 @@ class SPV_ViewTaskController extends GetxController {
       );
     }
   }
+  Future<void> startWork(String subInquiryId, projectId) async {
+    setLoader(true);
+
+    try {
+      final token = await _getToken();
+
+      final res = await SpvViewTaskService().startSubTask(token, subInquiryId);
+
+      Get.snackbar("Success", res["message"]);
+
+      // Reload list after action
+      await viewSubTask(projectId);
+
+    } catch (e) {
+      Get.snackbar("Error", e.toString());
+    }
+
+    setLoader(false);
+  }
+
+  Future<void> finishWork(String subInquiryId, projectId) async {
+    setLoader(true);
+
+    try {
+      final token = await _getToken();
+
+      final res = await SpvViewTaskService().finishSubTask(token, subInquiryId);
+
+      Get.snackbar("Success", res["message"]);
+
+      // Reload list after action
+      await viewSubTask(projectId);
+
+    } catch (e) {
+      Get.snackbar("Error", e.toString());
+    }
+
+    setLoader(false);
+  }
+  Future<void> startMainTask(String inquiryId, projectId) async {
+    setLoader(true);
+
+    try {
+      final token = await _getToken();
+
+      final res =
+      await SpvViewTaskService().startTask(token, inquiryId);
+
+      Get.snackbar("Success", res["message"]);
+
+      await viewTask(projectId);
+
+    } catch (e) {
+      Get.snackbar("Error", e.toString());
+    }
+
+    setLoader(false);
+  }
+
+  Future<void> finishMainTask(String inquiryId, projectId) async {
+    setLoader(true);
+
+    try {
+      final token = await _getToken();
+
+      final res =
+      await SpvViewTaskService().finishTask(token, inquiryId);
+
+      Get.snackbar("Success", res["message"]);
+
+      await viewTask(projectId);
+
+    } catch (e) {
+      Get.snackbar("Error", e.toString());
+    }
+
+    setLoader(false);
+  }
+
 }

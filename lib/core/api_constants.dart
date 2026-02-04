@@ -67,4 +67,17 @@ class ApiConstants {
   viewSubTask({projectId}) {
     return "$baseUrl/api/site-supervisor/tasks/$projectId";
   }
+
+  static String startSubTask(String subInquiryId) =>
+      "$baseUrl/api/timestamp/subinquiry/$subInquiryId/start";
+
+  static String finishSubTask(String subInquiryId) =>
+      "$baseUrl/api/timestamp/subinquiry/$subInquiryId/finish";
+
+
+  static String startTask(String inquiryId) =>
+      "$baseUrl/api/timestamp/inquiry/$inquiryId/start";
+
+  static String finishTask(String inquiryId) =>
+      "$baseUrl/api/timestamp/inquiry/$inquiryId/finish";
 }
