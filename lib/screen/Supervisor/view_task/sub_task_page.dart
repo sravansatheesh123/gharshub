@@ -160,6 +160,29 @@ class _SubTaskPageState extends State<SubTaskPage> {
                                         fontheight: 2,
                                       ),
 
+                                  
+                                    ],
+                                  ),
+                                  trailing: Container(
+                                    padding: EdgeInsets.symmetric(
+                                      horizontal: 7,
+                                      vertical: 7,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(5),
+                                      color: AppColors.lightAmberColor,
+                                      border: Border.all(
+                                        color: AppColors.lightAmberColor,
+                                      ),
+                                    ),
+                                    child: AppText(
+                                      subTask.status ?? "",
+                                      fontSize: 12,
+                                      fontheight: 2,
+                                    ),
+                                  ),
+                                ),
+
                                       subTask.remarks == ""
                                           ? Container()
                                           : Row(
@@ -189,27 +212,7 @@ class _SubTaskPageState extends State<SubTaskPage> {
                                           ),
                                         ],
                                       ),
-                                    ],
-                                  ),
-                                  trailing: Container(
-                                    padding: EdgeInsets.symmetric(
-                                      horizontal: 7,
-                                      vertical: 7,
-                                    ),
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(5),
-                                      color: AppColors.lightAmberColor,
-                                      border: Border.all(
-                                        color: AppColors.lightAmberColor,
-                                      ),
-                                    ),
-                                    child: AppText(
-                                      subTask.status ?? "",
-                                      fontSize: 12,
-                                      fontheight: 2,
-                                    ),
-                                  ),
-                                ),
+                                  
 
                                 SizedBox(height: 10),
 
